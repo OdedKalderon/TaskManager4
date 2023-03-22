@@ -15,7 +15,14 @@ class TaskProvider1 with ChangeNotifier {
     return [..._Tasks];
   }
 
-  List<Task> getTasks() {
-    return _Tasks;
+  void submitAddTaskForm(
+      String name, String description, String dateDue, bool isUrgent) async {
+    // _Tasks.add(Task(name, description, dateDue, isUrgent));
+    await _base.collection('tasks').doc().set({
+      'name': name,
+      'description': description,
+      'dateDue': dateDue,
+      'isUrgent': isUrgent
+    });
   }
 }

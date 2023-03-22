@@ -45,8 +45,8 @@ class _TabsScreenState extends State<TabsScreen> {
         currentIndex: _selectedPageIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.category),
-            label: 'Categories',
+            icon: Icon(Icons.task),
+            label: 'Tasks',
             backgroundColor: Theme.of(context).primaryColor,
           ),
           BottomNavigationBarItem(

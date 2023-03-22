@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -31,6 +32,26 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     if (isValid) {
       _formKey.currentState.save();
     }
+  }
+
+  DateTime _selectedDate;
+  void _presentDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 2),
+      //row above (41) makes it so the up is always up to date
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        _selectedDate = pickedDate;
+        _taskDateDue = _selectedDate.toString();
+      });
+    });
+    print('...');
   }
 
   @override
@@ -85,33 +106,48 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     maxLength: 80,
                     focusNode: _descriptionFocusNode,
                   ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(_selectedDate == null
+                            ? 'No Date Chosen!'
+                            : 'Picked Date: ${DateFormat.yMMMd().format(_selectedDate)}'),
+                      ),
+                      TextButton(
+                          onPressed: _presentDatePicker,
+                          child: Text(
+                            'Choose Date',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ))
+                    ],
+                  ),
+                  // Switch(
+                  //     value: false,
+                  //     onChanged: (_taskIsUrgent) {
+                  //       setState(() {
+                  //         _taskIsUrgent = !_taskIsUrgent;
+                  //       });
+                  //     }),
                 ],
               ),
             ),
-            SizedBox(
-              height: 10,
+            ElevatedButton(
+              onPressed: () {
+                // if (_formKey.currentState.validate()) {
+                //   Provider.of<CategoryProvider>(context, listen: false)
+                //       .addCategory();
+                // } else
+                //   () {
+                //     ScaffoldMessenger.of(context).showSnackBar(
+                //       const SnackBar(
+                //           content: Text('Could\'nt finish submiting')),
+                //     );
+                //     Navigator.of(context).pop();
+                //     return null;
+                //   };
+              },
+              child: const Text('Submit'),
             ),
-            //remind to add focusNode: _iconFocusNode => to icon picker field
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: ElevatedButton(
-                onPressed: () {
-                  // if (_formKey.currentState.validate()) {
-                  //   Provider.of<CategoryProvider>(context, listen: false)
-                  //       .addCategory();
-                  // } else
-                  //   () {
-                  //     ScaffoldMessenger.of(context).showSnackBar(
-                  //       const SnackBar(
-                  //           content: Text('Could\'nt finish submiting')),
-                  //     );
-                  //     Navigator.of(context).pop();
-                  //     return null;
-                  //   };
-                },
-                child: const Text('Submit'),
-              ),
-            )
           ],
         ),
       ),
