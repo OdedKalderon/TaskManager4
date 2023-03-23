@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/screens/acount_screen.dart';
 import 'package:flutter_complete_guide/screens/inbox_screen.dart';
 import 'package:flutter_complete_guide/screens/share__screen.dart';
 import 'package:flutter_complete_guide/screens/urgent_tasks_screen.dart';
 import 'package:flutter_iconpicker/IconPicker/Packs/Cupertino.dart';
+import 'package:provider/provider.dart';
 import 'tasks_screen.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -69,5 +71,14 @@ class _TabsScreenState extends State<TabsScreen> {
         ],
       ),
     );
+    // @override
+    // void didChangeDependencies() {
+    //   super.didChangeDependencies();
+    //   try {
+    //     Provider.of<TaskProvider1>(context, listen: false).fetchTaskData();
+    //   } catch (e) {
+    //     print(e);
+    //   }
+    // }
   }
 }

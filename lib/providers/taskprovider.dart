@@ -9,20 +9,38 @@ class TaskProvider1 with ChangeNotifier {
   ];
 
   final _auth = FirebaseAuth.instance;
-  final _base = FirebaseFirestore.instance;
 
   List<Task> get tasks {
+    fetchTaskData();
     return [..._Tasks];
   }
 
-  void submitAddTaskForm(
-      String name, String description, String dateDue, bool isUrgent) async {
-    // _Tasks.add(Task(name, description, dateDue, isUrgent));
-    await _base.collection('tasks').doc().set({
-      'name': name,
-      'description': description,
-      'dateDue': dateDue,
-      'isUrgent': isUrgent
-    });
+  // void submitAddTaskForm(
+  //     String name, String description, String dateDue, bool isUrgent) async {
+  //   // _Tasks.add(Task(name, description, dateDue, isUrgent));
+  //   await _base.collection('tasks').doc().set({
+  //     'name': name,
+  //     'description': description,
+  //     'dateDue': dateDue,
+  //     'isUrgent': isUrgent
+  //   });
+  // }
+
+  Future<void> fetchTaskData() async {
+    try {
+      await FirebaseFirestore.instance.collection('tasks').get().then(
+        (QuerySnapshot value) {
+          value.docs.forEach(
+            (result) {
+              _Tasks.add(Task(result["Name"], result["Description"],
+                  result["DateDue"], result["IsUrgent"]));
+            },
+          );
+        },
+      );
+    } catch (error) {
+      throw error;
+    }
+    notifyListeners();
   }
 }
