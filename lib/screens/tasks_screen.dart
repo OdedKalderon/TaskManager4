@@ -10,7 +10,6 @@ import '../providers/taskprovider.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({Key key}) : super(key: key);
-
   @override
   State<TasksScreen> createState() => _TasksScreenState();
 }
@@ -30,16 +29,46 @@ class _TasksScreenState extends State<TasksScreen> {
           padding: EdgeInsets.all(15),
           child: ListView.builder(
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(tasks[index].Name),
-                subtitle: tasks[index].Description.length <= 35
-                    ? Text(tasks[index].Description)
-                    : Text(
-                        tasks[index].Description.toString().substring(0, 36) +
-                            '...'),
-                tileColor: Colors.white,
-                trailing: Icon(IconData(0xf5d3,
-                    fontFamily: iconFont, fontPackage: iconFontPackage)),
+              return Column(
+                children: [
+                  ListTile(
+                    leading: tasks[index].IsUrgent
+                        ? Icon(
+                            IconData(0xf65a,
+                                fontFamily: iconFont,
+                                fontPackage: iconFontPackage),
+                            color: Colors.red,
+                            size: 39,
+                          )
+                        : Icon(
+                            IconData(0xf65a,
+                                fontFamily: iconFont,
+                                fontPackage: iconFontPackage),
+                            color: Colors.grey,
+                            size: 39,
+                          ),
+                    title: Text(tasks[index].Name),
+                    subtitle: tasks[index].Description.length <= 35
+                        ? Text(
+                            tasks[index].Description +
+                                '\nDate Due To: ' +
+                                tasks[index].DateDue,
+                          )
+                        : Text(tasks[index]
+                                .Description
+                                .toString()
+                                .substring(0, 36) +
+                            '... \n' +
+                            'Date Due To: ' +
+                            tasks[index].DateDue),
+                    tileColor: Colors.white,
+                    trailing: Icon(IconData(0xf5d3,
+                        fontFamily: iconFont, fontPackage: iconFontPackage)),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  )
+                ],
               );
             },
             itemCount: tasks.length,

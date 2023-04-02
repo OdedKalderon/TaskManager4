@@ -5,7 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/screens/acount_screen.dart';
 import 'package:flutter_complete_guide/screens/inbox_screen.dart';
-import 'package:flutter_complete_guide/screens/share__screen.dart';
+import 'package:flutter_complete_guide/screens/add_task_tab.dart';
 import 'package:flutter_complete_guide/screens/urgent_tasks_screen.dart';
 import 'package:flutter_iconpicker/IconPicker/Packs/Cupertino.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +22,7 @@ class _TabsScreenState extends State<TabsScreen> {
   final List<Widget> _pages = [
     TasksScreen(),
     UrgentsScreen(),
-    ShareScreen(),
+    AddTaskTab(),
     InboxScreen(),
     AcountScreen()
   ];
@@ -56,8 +56,9 @@ class _TabsScreenState extends State<TabsScreen> {
               label: 'Urgent',
               backgroundColor: Theme.of(context).primaryColor),
           BottomNavigationBarItem(
-              icon: Icon(Icons.share),
-              label: 'Share',
+              icon: Icon(IconData(0xf776,
+                  fontFamily: iconFont, fontPackage: iconFontPackage)),
+              label: 'Add New Task',
               backgroundColor: Theme.of(context).primaryColor),
           BottomNavigationBarItem(
               icon: Icon(Icons.inbox),
