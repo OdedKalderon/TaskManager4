@@ -66,18 +66,46 @@ class UrgentsScreen extends StatelessWidget {
                   return Column(
                     children: [
                       ListTile(
-                        leading: Icon(
-                          IconData(0xf65a,
-                              fontFamily: iconFont,
-                              fontPackage: iconFontPackage),
-                          color: Colors.red,
-                          size: 39,
+                        leading: Image.network(
+                          "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg",
                         ),
-                        title: Text(urgs[index].Name),
+                        title: urgs[index].IsUrgent
+                            ? Row(
+                                children: [
+                                  Text(urgs[index].Name),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Icon(
+                                    IconData(0xf65a,
+                                        fontFamily: iconFont,
+                                        fontPackage: iconFontPackage),
+                                    color: Colors.red,
+                                    size: 20,
+                                  )
+                                ],
+                              )
+                            : Row(
+                                children: [
+                                  Text(urgs[index].Name),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Icon(
+                                    IconData(0xf65a,
+                                        fontFamily: iconFont,
+                                        fontPackage: iconFontPackage),
+                                    color: Colors.grey,
+                                    size: 20,
+                                  ),
+                                ],
+                              ),
                         subtitle: urgs[index].Description.length <= 35
-                            ? Text(urgs[index].Description +
-                                '\nDate Due To: ' +
-                                urgs[index].DateDue)
+                            ? Text(
+                                urgs[index].Description +
+                                    '\nDate Due To: ' +
+                                    urgs[index].DateDue,
+                              )
                             : Text(urgs[index]
                                     .Description
                                     .toString()

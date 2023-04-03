@@ -32,22 +32,40 @@ class _TasksScreenState extends State<TasksScreen> {
               return Column(
                 children: [
                   ListTile(
-                    leading: tasks[index].IsUrgent
-                        ? Icon(
-                            IconData(0xf65a,
-                                fontFamily: iconFont,
-                                fontPackage: iconFontPackage),
-                            color: Colors.red,
-                            size: 39,
+                    leading: Image.network(
+                      "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg",
+                    ),
+                    title: tasks[index].IsUrgent
+                        ? Row(
+                            children: [
+                              Text(tasks[index].Name),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Icon(
+                                IconData(0xf65a,
+                                    fontFamily: iconFont,
+                                    fontPackage: iconFontPackage),
+                                color: Colors.red,
+                                size: 20,
+                              )
+                            ],
                           )
-                        : Icon(
-                            IconData(0xf65a,
-                                fontFamily: iconFont,
-                                fontPackage: iconFontPackage),
-                            color: Colors.grey,
-                            size: 39,
+                        : Row(
+                            children: [
+                              Text(tasks[index].Name),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Icon(
+                                IconData(0xf65a,
+                                    fontFamily: iconFont,
+                                    fontPackage: iconFontPackage),
+                                color: Colors.grey,
+                                size: 20,
+                              ),
+                            ],
                           ),
-                    title: Text(tasks[index].Name),
                     subtitle: tasks[index].Description.length <= 35
                         ? Text(
                             tasks[index].Description +

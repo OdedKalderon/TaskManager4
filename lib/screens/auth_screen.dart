@@ -59,7 +59,9 @@ class _AuthScreenState extends State<AuthScreen> {
                   TextFormField(
                     key: ValueKey('email'),
                     validator: (value) {
-                      if (value.isEmpty || !value.contains('@')) {
+                      if (value.isEmpty ||
+                          !value.contains('@') ||
+                          !value.contains('.')) {
                         return 'Please enter a valid email address.';
                       }
                       return null;
@@ -91,6 +93,12 @@ class _AuthScreenState extends State<AuthScreen> {
                     validator: (value) {
                       if (value.isEmpty || value.length < 7) {
                         return 'Password must be at least 7 characters long.';
+                      } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                        return 'Password must have numbers 0-9 in it.';
+                      } else if (!RegExp(r'^[a-z]+$').hasMatch(value)) {
+                        return 'Password must have letter a-z in it.';
+                      } else if (RegExp(r'^[A-Z]+$').hasMatch(value)) {
+                        return 'Password Cannot have letter A-Z in it.';
                       }
                       return null;
                     },
