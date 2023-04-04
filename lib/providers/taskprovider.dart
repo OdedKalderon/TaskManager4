@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_complete_guide/models/task.dart';
 
 class TaskProvider1 with ChangeNotifier {
@@ -25,6 +27,7 @@ class TaskProvider1 with ChangeNotifier {
   }
 
   final _auth = FirebaseAuth.instance;
+  final _database = FirebaseFirestore.instance;
 
   List<Task> get tasks {
     fetchTaskData();
@@ -37,16 +40,38 @@ class TaskProvider1 with ChangeNotifier {
     return [..._urgentTasks];
   }
 
-  // void submitAddTaskForm(
-  //     String name, String description, String dateDue, bool isUrgent) async {
-  //   // _Tasks.add(Task(name, description, dateDue, isUrgent));
-  //   await _base.collection('tasks').doc().set({
-  //     'name': name,
-  //     'description': description,
-  //     'dateDue': dateDue,
-  //     'isUrgent': isUrgent
-  //   });
-  // }
+  void submitAddTaskForm(
+    String name,
+    String description,
+    String dateDue,
+    bool isUrgent,
+    BuildContext ctx,
+  ) async {
+    try {
+      await _database.collection('tasks').add({
+        'Name': name,
+        'Description': description,
+        'DateDue': dateDue,
+        'IsUrgent': isUrgent
+      });
+    } on PlatformException catch (err) {
+      var message =
+          'An error occurred, please check the information you inputed or try again later';
+
+      if (err.message != null) {
+        message = err.message;
+      }
+
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Theme.of(ctx).errorColor,
+        ),
+      );
+    } catch (err) {
+      print(err);
+    }
+  }
 
   Future<void> fetchTaskData() async {
     try {
