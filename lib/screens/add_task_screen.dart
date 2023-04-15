@@ -82,7 +82,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               child: Column(
                 children: [
                   TextFormField(
-                    key: ValueKey('taskName'),
                     validator: (nameValue) {
                       if (nameValue == null || nameValue.trim().isEmpty) {
                         return 'Please enter a name';
@@ -109,7 +108,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     height: 5,
                   ),
                   TextFormField(
-                    key: ValueKey('taskDescription'),
                     validator: (descriptionValue) {
                       if (descriptionValue == null ||
                           descriptionValue.trim().isEmpty) {
