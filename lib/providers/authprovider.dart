@@ -10,6 +10,10 @@ class AuthProvider with ChangeNotifier {
   var _isLoading = false;
   String uid;
 
+  String get Userid {
+    return uid;
+  }
+
   void submitAuthForm(
     String email,
     String password,
@@ -38,6 +42,7 @@ class AuthProvider with ChangeNotifier {
           'email': email,
         });
       }
+      uid = authResult.user.uid;
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 

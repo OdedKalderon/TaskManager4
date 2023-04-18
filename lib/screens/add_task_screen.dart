@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_complete_guide/main_drawer.dart';
 
+import '../providers/authprovider.dart';
 import '../providers/taskprovider.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           _taskDescription.trim(),
           _taskDateDue,
           _taskIsUrgent,
-          context);
+          context,
+          Provider.of<AuthProvider>(context, listen: false).Userid);
     } else
       () {
         ScaffoldMessenger.of(context).showSnackBar(

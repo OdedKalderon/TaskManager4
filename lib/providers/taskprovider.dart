@@ -7,12 +7,18 @@ import 'package:flutter_complete_guide/models/task.dart';
 
 class TaskProvider1 with ChangeNotifier {
   List<Task> _Tasks = [
-    Task('Test', 'This is a test task', '14/03/2023', false),
-    Task('Test 2', 'This is a test task 2', '31/03/2023', true),
-    Task('Test 3', 'This is a test task 3', '15/03/2023', false),
-    Task('Test 4', 'This is a test task 4', '16/03/2023', false),
-    Task('Test 5', 'This is a test task 5', '17/03/2023', false),
-    Task('Test 6', 'This is a test task 6', '18/03/2023', true),
+    Task('Test', 'This is a test task', '14/03/2023', false,
+        "DvjFtFVu0ZYz3SGabcqKQfAKF1y1"),
+    Task('Test 2', 'This is a test task 2', '31/03/2023', true,
+        "DvjFtFVu0ZYz3SGabcqKQfAKF1y1"),
+    Task('Test 3', 'This is a test task 3', '15/03/2023', false,
+        "DvjFtFVu0ZYz3SGabcqKQfAKF1y1"),
+    Task('Test 4', 'This is a test task 4', '16/03/2023', false,
+        "DvjFtFVu0ZYz3SGabcqKQfAKF1y1"),
+    Task('Test 5', 'This is a test task 5', '17/03/2023', false,
+        "DvjFtFVu0ZYz3SGabcqKQfAKF1y1"),
+    Task('Test 6', 'This is a test task 6', '18/03/2023', true,
+        "DvjFtFVu0ZYz3SGabcqKQfAKF1y1"),
   ];
   List<Task> _urgentTasks = [];
 
@@ -40,19 +46,15 @@ class TaskProvider1 with ChangeNotifier {
     return [..._urgentTasks];
   }
 
-  void submitAddTaskForm(
-    String name,
-    String description,
-    String dateDue,
-    bool isUrgent,
-    BuildContext ctx,
-  ) async {
+  void submitAddTaskForm(String name, String description, String dateDue,
+      bool isUrgent, BuildContext ctx, String Userid) async {
     try {
       await _database.collection('tasks').add({
         'Name': name,
         'Description': description,
         'DateDue': dateDue,
-        'IsUrgent': isUrgent
+        'IsUrgent': isUrgent,
+        'UserId': Userid,
       });
     } on PlatformException catch (err) {
       var message =
@@ -80,7 +82,7 @@ class TaskProvider1 with ChangeNotifier {
           value.docs.forEach(
             (result) {
               _Tasks.add(Task(result["Name"], result["Description"],
-                  result["DateDue"], result["IsUrgent"]));
+                  result["DateDue"], result["IsUrgent"], result["UserId"]));
             },
           );
         },
