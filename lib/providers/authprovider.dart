@@ -14,6 +14,18 @@ class AuthProvider with ChangeNotifier {
     return uid;
   }
 
+  // Future<User> fetchUserData(String userid) async {
+  //   await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .get()
+  //       .then((QuerySnapshot value) {
+  //     value.docs.forEach((result) {
+  //       userid == result['userId'] ? return User(result['userid'], result['username'], result['email']) : return null;
+  //     });
+  //   });
+  //   notifyListeners();
+  // }
+
   void submitAuthForm(
     String email,
     String password,
@@ -38,6 +50,7 @@ class AuthProvider with ChangeNotifier {
             .collection('users')
             .doc(authResult.user.uid)
             .set({
+          'userId': authResult.user.uid,
           'username': username,
           'email': email,
         });

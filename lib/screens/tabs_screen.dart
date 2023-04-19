@@ -13,7 +13,6 @@ import 'tasks_screen.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({Key key}) : super(key: key);
-
   @override
   State<TabsScreen> createState() => _TabsScreenState();
 }
@@ -27,6 +26,12 @@ class _TabsScreenState extends State<TabsScreen> {
     AcountScreen()
   ];
   int _selectedPageIndex = 0;
+
+  // @override
+  // void didChangeDependencies() {
+  //   // TODO: implement didChangeDependencies
+  //   super.didChangeDependencies();
+  // }
 
   void _selectPage(int index) {
     setState(() {

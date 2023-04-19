@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
 
 import '../main_drawer.dart';
+import '../providers/authprovider.dart';
+import '../models/user.dart';
 
 class AcountScreen extends StatefulWidget {
   const AcountScreen({Key key}) : super(key: key);
@@ -16,6 +19,7 @@ class AcountScreen extends StatefulWidget {
 class _AcountScreenState extends State<AcountScreen> {
   @override
   Widget build(BuildContext context) {
+    //User userinfo = fetchUserData(Provider.of<AuthProvider>(context, listen: false).Userid);
     return Scaffold(
       appBar: AppBar(
         title: Text('Acount'),
@@ -73,7 +77,7 @@ class _AcountScreenState extends State<AcountScreen> {
                               width: 4,
                               color: Theme.of(context).scaffoldBackgroundColor,
                             ),
-                            color: Colors.green,
+                            color: Theme.of(context).accentColor,
                           ),
                           child: Icon(
                             Icons.edit,

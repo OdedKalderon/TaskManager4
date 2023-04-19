@@ -26,6 +26,9 @@ class _AuthScreenState extends State<AuthScreen> {
     FocusScope.of(context).unfocus();
 
     if (isValid) {
+      setState(() {
+        _isLoading = true;
+      });
       _formKey.currentState.save();
       Provider.of<AuthProvider>(context, listen: false).submitAuthForm(
           _userEmail.trim(),

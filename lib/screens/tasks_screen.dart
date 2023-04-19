@@ -31,57 +31,61 @@ class _TasksScreenState extends State<TasksScreen> {
             itemBuilder: (context, index) {
               return Column(
                 children: [
-                  ListTile(
-                    leading: Image.network(
-                      "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg",
+                  Container(
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                    child: ListTile(
+                      leading: Image.network(
+                        "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg",
+                      ),
+                      title: tasks[index].IsUrgent
+                          ? Row(
+                              children: [
+                                Text(tasks[index].Name),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(
+                                  IconData(0xf65a,
+                                      fontFamily: iconFont,
+                                      fontPackage: iconFontPackage),
+                                  color: Colors.red,
+                                  size: 20,
+                                )
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Text(tasks[index].Name),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(
+                                  IconData(0xf65a,
+                                      fontFamily: iconFont,
+                                      fontPackage: iconFontPackage),
+                                  color: Colors.grey,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                      subtitle: tasks[index].Description.length <= 35
+                          ? Text(
+                              tasks[index].Description +
+                                  '\nDate Due To: ' +
+                                  tasks[index].DateDue,
+                            )
+                          : Text(tasks[index]
+                                  .Description
+                                  .toString()
+                                  .substring(0, 36) +
+                              '... \n' +
+                              'Date Due To: ' +
+                              tasks[index].DateDue),
+                      tileColor: Colors.white,
+                      trailing: Icon(IconData(0xf5d3,
+                          fontFamily: iconFont, fontPackage: iconFontPackage)),
                     ),
-                    title: tasks[index].IsUrgent
-                        ? Row(
-                            children: [
-                              Text(tasks[index].Name),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Icon(
-                                IconData(0xf65a,
-                                    fontFamily: iconFont,
-                                    fontPackage: iconFontPackage),
-                                color: Colors.red,
-                                size: 20,
-                              )
-                            ],
-                          )
-                        : Row(
-                            children: [
-                              Text(tasks[index].Name),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Icon(
-                                IconData(0xf65a,
-                                    fontFamily: iconFont,
-                                    fontPackage: iconFontPackage),
-                                color: Colors.grey,
-                                size: 20,
-                              ),
-                            ],
-                          ),
-                    subtitle: tasks[index].Description.length <= 35
-                        ? Text(
-                            tasks[index].Description +
-                                '\nDate Due To: ' +
-                                tasks[index].DateDue,
-                          )
-                        : Text(tasks[index]
-                                .Description
-                                .toString()
-                                .substring(0, 36) +
-                            '... \n' +
-                            'Date Due To: ' +
-                            tasks[index].DateDue),
-                    tileColor: Colors.white,
-                    trailing: Icon(IconData(0xf5d3,
-                        fontFamily: iconFont, fontPackage: iconFontPackage)),
                   ),
                   SizedBox(
                     height: 10,

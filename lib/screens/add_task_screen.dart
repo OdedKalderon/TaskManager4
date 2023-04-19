@@ -148,9 +148,25 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ],
               ),
             ),
-            ElevatedButton(
-              onPressed: _taskFormSubmit,
-              child: const Text('Submit'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _taskFormSubmit,
+                  child: const Text('Submit'),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Switch(
+                    value: _taskIsUrgent,
+                    activeColor: Colors.red,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _taskIsUrgent = value;
+                      });
+                    })
+              ],
             ),
           ],
         ),
