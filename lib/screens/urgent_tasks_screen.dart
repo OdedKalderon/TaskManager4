@@ -66,9 +66,6 @@ class UrgentsScreen extends StatelessWidget {
                   return Column(
                     children: [
                       ListTile(
-                        leading: Image.network(
-                          "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg",
-                        ),
                         title: urgs[index].IsUrgent
                             ? Row(
                                 children: [

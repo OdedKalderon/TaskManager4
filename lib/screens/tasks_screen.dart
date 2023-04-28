@@ -35,9 +35,6 @@ class _TasksScreenState extends State<TasksScreen> {
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(10)),
                     child: ListTile(
-                      leading: Image.network(
-                        "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg",
-                      ),
                       title: tasks[index].IsUrgent
                           ? Row(
                               children: [

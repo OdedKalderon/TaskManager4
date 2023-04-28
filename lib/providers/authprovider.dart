@@ -9,12 +9,18 @@ class AuthProvider with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
   String uid;
+  User userData;
 
   String get Userid {
     return uid;
   }
 
-  // Future<User> fetchUserData(String userid) async {
+  // User get userdata {
+  //   fetchUserData(FirebaseAuth.instance.currentUser.uid, userData);
+  //   return userData;
+  // }
+
+  // Future<void> fetchUserData(String userid, User currentUserData) async {
   //   await FirebaseFirestore.instance
   //       .collection('users')
   //       .get()
@@ -50,7 +56,7 @@ class AuthProvider with ChangeNotifier {
             .collection('users')
             .doc(authResult.user.uid)
             .set({
-          'userId': authResult.user.uid,
+          'userid': FirebaseAuth.instance.currentUser.uid,
           'username': username,
           'email': email,
         });

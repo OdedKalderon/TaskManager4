@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -34,10 +36,6 @@ class _AcountScreenState extends State<AcountScreen> {
           },
           child: ListView(
             children: [
-              Text(
-                "Edit Profile",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              ),
               SizedBox(
                 height: 15,
               ),
@@ -65,94 +63,81 @@ class _AcountScreenState extends State<AcountScreen> {
                                 "https://pbs.twimg.com/media/FGCpQkBXMAIqA6d.jpg:large",
                               ))),
                     ),
-                    Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                            color: Theme.of(context).accentColor,
-                          ),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                        )),
                   ],
                 ),
               ),
               SizedBox(
-                height: 35,
+                height: 10,
               ),
-              buildTextField("Username", "Firebase_Username"),
-              buildTextField("E-mail", "Firebase_Email"),
-              SizedBox(
-                height: 35,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
                 children: [
+                  Text(
+                    'OdedKalderon',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  SizedBox(height: 4),
+                  Text('odedkalderon@gmail.com',
+                      style: TextStyle(fontSize: 16)),
                   SizedBox(
-                    width: 18,
+                    height: 30,
                   ),
-                  OutlinedButton(
-                    // padding: EdgeInsets.symmetric(horizontal: 50),
-                    // shape: RoundedRectangleBorder(
-                    //     borderRadius: BorderRadius.circular(20)),
-                    onPressed: () {},
-                    child: Text("CANCEL",
-                        style: TextStyle(
-                            fontSize: 14,
-                            letterSpacing: 2.2,
-                            color: Colors.black)),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    // color: Colors.green,
-                    // padding: EdgeInsets.symmetric(horizontal: 50),
-                    // elevation: 2,
-                    // shape: RoundedRectangleBorder(
-                    //     borderRadius: BorderRadius.circular(20)),
-                    child: Text(
-                      "SAVE",
-                      style: TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 2.2,
-                          color: Colors.white),
-                    ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(15)),
+                        alignment: Alignment.center,
+                        width: 169,
+                        height: 360,
+                        child: Text('List of Friends'),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(15)),
+                        alignment: Alignment.center,
+                        width: 169,
+                        height: 360,
+                        child: Text('2 week history tasks '),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                    ],
                   ),
                   SizedBox(
-                    width: 18,
-                  )
+                    height: 25,
+                  ),
+                  Container(
+                    width: 155,
+                    height: 50,
+                    child: ElevatedButton(
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(Icons.person_add_alt),
+                            SizedBox(
+                              width: 16,
+                            ),
+                            Text('Add A Friend')
+                          ],
+                        )),
+                  ),
                 ],
-              )
+              ),
+              SizedBox(
+                height: 25,
+              ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget buildTextField(String labelText, String placeholder) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 35.0),
-      child: TextField(
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: labelText,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: placeholder,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
       ),
     );
   }
