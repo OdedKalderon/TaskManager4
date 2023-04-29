@@ -18,7 +18,8 @@ class UrgentsScreen extends StatelessWidget {
     List<Task> urgs = Provider.of<TaskProvider1>(context, listen: false).urgs;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Urgents'),
+        title: const Text('Urgents',
+            style: TextStyle(fontWeight: FontWeight.w600)),
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       drawer: MainDrawer(),
@@ -66,6 +67,10 @@ class UrgentsScreen extends StatelessWidget {
                   return Column(
                     children: [
                       ListTile(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                         title: urgs[index].IsUrgent
                             ? Row(
                                 children: [

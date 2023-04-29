@@ -24,7 +24,7 @@ class _AcountScreenState extends State<AcountScreen> {
     //User userinfo = fetchUserData(Provider.of<AuthProvider>(context, listen: false).Userid);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Acount'),
+        title: Text('Acount', style: TextStyle(fontWeight: FontWeight.w600)),
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       drawer: MainDrawer(),
@@ -36,9 +36,6 @@ class _AcountScreenState extends State<AcountScreen> {
           },
           child: ListView(
             children: [
-              SizedBox(
-                height: 15,
-              ),
               Center(
                 child: Stack(
                   children: [
@@ -94,6 +91,7 @@ class _AcountScreenState extends State<AcountScreen> {
                         width: 169,
                         height: 360,
                         child: Text('List of Friends'),
+                        //THIS WILL BE CHANGES WITH A SCROLLABLE
                       ),
                       SizedBox(
                         width: 20,
@@ -106,6 +104,7 @@ class _AcountScreenState extends State<AcountScreen> {
                         width: 169,
                         height: 360,
                         child: Text('2 week history tasks '),
+                        //THIS WILL BE CHANGES WITH A SCROLLABLE
                       ),
                       SizedBox(
                         width: 10,
@@ -113,7 +112,7 @@ class _AcountScreenState extends State<AcountScreen> {
                     ],
                   ),
                   SizedBox(
-                    height: 25,
+                    height: 35,
                   ),
                   Container(
                     width: 155,
@@ -131,9 +130,6 @@ class _AcountScreenState extends State<AcountScreen> {
                         )),
                   ),
                 ],
-              ),
-              SizedBox(
-                height: 25,
               ),
             ],
           ),

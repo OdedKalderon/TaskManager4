@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:intl/intl.dart';
@@ -39,7 +40,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           _taskDateDue,
           _taskIsUrgent,
           context,
-          Provider.of<AuthProvider>(context, listen: false).Userid);
+          FirebaseAuth.instance.currentUser.uid);
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Task Was Successfully Added'),
+        duration: Duration(seconds: 3),
+      ));
     } else
       () {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -74,7 +80,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       //drawer: MainDrawer(),
-      appBar: AppBar(title: Text('Add Task')),
+      appBar: AppBar(
+        title: Text('Add Task', style: TextStyle(fontWeight: FontWeight.w600)),
+      ),
       body: Form(
         key: _formKey,
         child: Column(
@@ -145,6 +153,22 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           ))
                     ],
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(!_taskIsUrgent
+                          ? 'Status: Not Urgent'
+                          : 'Status: Urgent'),
+                      Switch(
+                          value: _taskIsUrgent,
+                          activeColor: Colors.red,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _taskIsUrgent = value;
+                            });
+                          })
+                    ],
+                  )
                 ],
               ),
             ),
@@ -158,14 +182,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 SizedBox(
                   width: 10,
                 ),
-                Switch(
-                    value: _taskIsUrgent,
-                    activeColor: Colors.red,
-                    onChanged: (bool value) {
-                      setState(() {
-                        _taskIsUrgent = value;
-                      });
-                    })
               ],
             ),
           ],

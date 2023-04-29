@@ -13,7 +13,8 @@ class InboxScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inbox'),
+        title:
+            const Text('Inbox', style: TextStyle(fontWeight: FontWeight.w600)),
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       drawer: MainDrawer(),
