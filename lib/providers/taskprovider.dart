@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_complete_guide/models/task.dart';
 
+import '../models/todo_item.dart';
+
 class TaskProvider1 with ChangeNotifier {
   List<Task> _Tasks = [
     Task('Test', 'This is a test task', '14/03/2023', false,
@@ -16,6 +18,12 @@ class TaskProvider1 with ChangeNotifier {
     Task('Test 4', 'This is a test task 4', '18/03/2023', true,
         "7cinqzLA74U0eI8eWiIy5Bj2CeG3"),
   ];
+
+  List<Todo> todolist = [
+    Todo('KQ0CNENVcc3cUowaDv2j', 'Baloons', false),
+    Todo('KQ0CNENVcc3cUowaDv2j', 'Cake', false)
+  ];
+
   List<Task> _urgentTasks = [];
 
   List<Task> getUrgents() {

@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/models/todo_item.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
+import 'package:flutter_complete_guide/widgets/todoItem.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -25,6 +29,25 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   String _taskDescription = '';
   String _taskDateDue = '';
   bool _taskIsUrgent = false;
+
+  List<Todo> _newtodos = [];
+  final _todoController = TextEditingController();
+  void _addTodo(String todo) {
+    _newtodos.add(Todo(null, todo, false));
+    _todoController.clear();
+  }
+
+  void _todoDone(Todo todo) {
+    setState(() {
+      todo.isDone = !todo.isDone;
+    });
+  }
+
+  void _deleteToDoItem(String todoText) {
+    setState(() {
+      _newtodos.removeWhere((item) => item.text == todoText);
+    });
+  }
 
   final _descriptionFocusNode = FocusNode();
 
@@ -153,12 +176,96 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           ))
                     ],
                   ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Text(
+                        'Things To Do',
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.w500),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    bottom: 20, right: 20, left: 20),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey,
+                                          offset: Offset(0, 0),
+                                          blurRadius: 6,
+                                          spreadRadius: 0),
+                                    ],
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: TextField(
+                                  controller: _todoController,
+                                  decoration: InputDecoration(
+                                      hintText: 'Add a new todo item',
+                                      border: InputBorder.none),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 20, right: 20),
+                              child: ElevatedButton(
+                                child: Text(
+                                  '+',
+                                  style: TextStyle(fontSize: 40),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _addTodo(_todoController.text);
+                                  });
+                                  ;
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Theme.of(context).accentColor,
+                                    minimumSize: Size(60, 60),
+                                    elevation: 6),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                          padding: EdgeInsets.all(10),
+                          width: double.infinity,
+                          height: 240,
+                          child: ListView(
+                            children: [
+                              for (Todo todoo in _newtodos)
+                                TodoItem(
+                                  todo: todoo,
+                                  isDone: _todoDone,
+                                  onDeleteItem: _deleteToDoItem,
+                                )
+                            ],
+                          )),
+                    ],
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(!_taskIsUrgent
-                          ? 'Status: Not Urgent'
-                          : 'Status: Urgent'),
+                      Text(
+                        !_taskIsUrgent
+                            ? 'Status: Not Urgent'
+                            : 'Status: Urgent',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w400),
+                      ),
                       Switch(
                           value: _taskIsUrgent,
                           activeColor: Colors.red,
@@ -172,18 +279,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: _taskFormSubmit,
-                  child: const Text('Submit'),
+            ElevatedButton(
+                onPressed: _taskFormSubmit,
+                child: const Text(
+                  'Submit',
+                  style: TextStyle(fontSize: 16),
                 ),
-                SizedBox(
-                  width: 10,
-                ),
-              ],
-            ),
+                style: ElevatedButton.styleFrom(
+                  fixedSize: Size(90, 30),
+                  backgroundColor: Theme.of(context).accentColor,
+                )),
           ],
         ),
       ),
