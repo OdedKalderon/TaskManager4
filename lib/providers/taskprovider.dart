@@ -15,8 +15,6 @@ class TaskProvider1 with ChangeNotifier {
         "7cinqzLA74U0eI8eWiIy5Bj2CeG3"),
     Task('Test 3', 'This is a test task 3', '15/03/2023', false,
         "7cinqzLA74U0eI8eWiIy5Bj2CeG3"),
-    Task('Test 4', 'This is a test task 4', '18/03/2023', true,
-        "7cinqzLA74U0eI8eWiIy5Bj2CeG3"),
   ];
 
   List<Todo> todolist = [
@@ -26,25 +24,22 @@ class TaskProvider1 with ChangeNotifier {
 
   List<Task> _urgentTasks = [];
 
-  List<Task> getUrgents() {
+  void getUrgents() {
     for (int i = 0; i < _Tasks.length; i++) {
       if (_Tasks[i].IsUrgent == true) {
         _urgentTasks.add(_Tasks[i]);
       }
     }
-    return [..._urgentTasks];
   }
 
   final _auth = FirebaseAuth.instance;
   final _database = FirebaseFirestore.instance;
 
   List<Task> get tasks {
-    fetchTaskData(_Tasks);
     return [..._Tasks];
   }
 
   List<Task> get urgs {
-    getUrgents();
     return [..._urgentTasks];
   }
 
@@ -58,6 +53,7 @@ class TaskProvider1 with ChangeNotifier {
         'IsUrgent': isUrgent,
         'UserId': Userid,
       });
+      _Tasks.add(Task(name, description, dateDue, isUrgent, Userid));
     } on PlatformException catch (err) {
       var message =
           'An error occurred, please check the information you inputed or try again later';
@@ -77,12 +73,12 @@ class TaskProvider1 with ChangeNotifier {
     }
   }
 
-  Future<void> fetchTaskData(List<Task> tsk) async {
+  Future<void> fetchTaskData() async {
     await FirebaseFirestore.instance.collection('tasks').get().then(
       (QuerySnapshot value) {
         value.docs.forEach(
           (result) {
-            tsk.add(Task(result["Name"], result["Description"],
+            _Tasks.add(Task(result["Name"], result["Description"],
                 result["DateDue"], result["IsUrgent"], result["UserId"]));
           },
         );

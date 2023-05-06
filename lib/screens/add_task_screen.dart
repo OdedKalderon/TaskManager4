@@ -35,6 +35,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   void _addTodo(String todo) {
     _newtodos.add(Todo(null, todo, false));
     _todoController.clear();
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   void _todoDone(Todo todo) {
@@ -225,9 +226,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                   style: TextStyle(fontSize: 40),
                                 ),
                                 onPressed: () {
-                                  setState(() {
-                                    _addTodo(_todoController.text);
-                                  });
+                                  _todoController.text.isEmpty
+                                      ? ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                          content: Text(
+                                              'Please add a text to the to do field before adding one'),
+                                          duration: Duration(seconds: 2),
+                                        ))
+                                      : setState(() {
+                                          _addTodo(_todoController.text);
+                                        });
                                   ;
                                 },
                                 style: ElevatedButton.styleFrom(

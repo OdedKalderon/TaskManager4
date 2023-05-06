@@ -25,13 +25,15 @@ class _TabsScreenState extends State<TabsScreen> {
     InboxScreen(),
     AcountScreen()
   ];
-  int _selectedPageIndex = 0;
+  int _selectedPageIndex = 3;
 
-  // @override
-  // void didChangeDependencies() {
-  //   // TODO: implement didChangeDependencies
-  //   super.didChangeDependencies();
-  // }
+  @override
+  void didChangeDependencies() async {
+    await Provider.of<TaskProvider1>(context, listen: false).fetchTaskData();
+    Provider.of<TaskProvider1>(context, listen: false).getUrgents();
+
+    super.didChangeDependencies();
+  }
 
   void _selectPage(int index) {
     setState(() {
