@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../main_drawer.dart';
 import '../providers/authprovider.dart';
-import '../models/user.dart';
+import '../models/userc.dart';
 
 class AcountScreen extends StatefulWidget {
   const AcountScreen({Key key}) : super(key: key);
@@ -69,11 +69,15 @@ class _AcountScreenState extends State<AcountScreen> {
               Column(
                 children: [
                   Text(
-                    'OdedKalderon',
-                    style: TextStyle(fontSize: 20),
+                    '@' +
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .getusername(),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: 4),
-                  Text('odedkalderon@gmail.com',
+                  Text(
+                      Provider.of<AuthProvider>(context, listen: false)
+                          .getemail(),
                       style: TextStyle(fontSize: 16)),
                   SizedBox(
                     height: 30,
@@ -91,7 +95,7 @@ class _AcountScreenState extends State<AcountScreen> {
                         width: 169,
                         height: 360,
                         child: Text('List of Friends'),
-                        //THIS WILL BE CHANGES WITH A SCROLLABLE
+                        //THIS WILL BE CHANGED WITH A SCROLLABLE
                       ),
                       SizedBox(
                         width: 20,
@@ -104,7 +108,7 @@ class _AcountScreenState extends State<AcountScreen> {
                         width: 169,
                         height: 360,
                         child: Text('2 week history tasks '),
-                        //THIS WILL BE CHANGES WITH A SCROLLABLE
+                        //THIS WILL BE CHANGED WITH A SCROLLABLE
                       ),
                       SizedBox(
                         width: 10,

@@ -9,6 +9,7 @@ import 'package:flutter_complete_guide/screens/add_task_tab.dart';
 import 'package:flutter_complete_guide/screens/urgent_tasks_screen.dart';
 import 'package:flutter_iconpicker/IconPicker/Packs/Cupertino.dart';
 import 'package:provider/provider.dart';
+import '../providers/authprovider.dart';
 import 'tasks_screen.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -31,7 +32,8 @@ class _TabsScreenState extends State<TabsScreen> {
   void didChangeDependencies() async {
     await Provider.of<TaskProvider1>(context, listen: false).fetchTaskData();
     Provider.of<TaskProvider1>(context, listen: false).getUrgents();
-
+    Provider.of<TaskProvider1>(context, listen: false).fetchTodoData();
+    Provider.of<AuthProvider>(context, listen: false).fetchUsersData();
     super.didChangeDependencies();
   }
 

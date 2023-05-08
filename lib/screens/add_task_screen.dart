@@ -33,7 +33,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   List<Todo> _newtodos = [];
   final _todoController = TextEditingController();
   void _addTodo(String todo) {
-    _newtodos.add(Todo(null, todo, false));
+    _newtodos.add(Todo(null, null, todo,
+        false)); //need to check how to put the task id ijust created in the field needed
     _todoController.clear();
     FocusManager.instance.primaryFocus?.unfocus();
   }
@@ -52,19 +53,23 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   final _descriptionFocusNode = FocusNode();
 
-  void _taskFormSubmit() {
+  void _taskFormSubmit() async {
     final isValid = _formKey.currentState?.validate();
     FocusScope.of(context).unfocus();
     if (isValid) {
       _formKey.currentState.save();
       _taskDateDue = DateFormat.yMMMd().format(_selectedDate);
-      Provider.of<TaskProvider1>(context, listen: false).submitAddTaskForm(
-          _taskName.trim(),
-          _taskDescription.trim(),
-          _taskDateDue,
-          _taskIsUrgent,
-          context,
-          FirebaseAuth.instance.currentUser.uid);
+      String _tmpid = DateTime.now().millisecondsSinceEpoch.toString();
+      String _tskid = await Provider.of<TaskProvider1>(context, listen: false)
+          .submitAddTaskForm(
+              _taskName.trim(),
+              _taskDescription.trim(),
+              _taskDateDue,
+              _taskIsUrgent,
+              context,
+              FirebaseAuth.instance.currentUser.uid,
+              _tmpid);
+      //add todo's to firebase while taskId = _tskid and tempId = _tmpid
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Task Was Successfully Added'),

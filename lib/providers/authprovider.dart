@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../models/userc.dart';
+
 class AuthProvider with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
@@ -15,22 +17,7 @@ class AuthProvider with ChangeNotifier {
     return uid;
   }
 
-  // User get userdata {
-  //   fetchUserData(FirebaseAuth.instance.currentUser.uid, userData);
-  //   return userData;
-  // }
-
-  // Future<void> fetchUserData(String userid, User currentUserData) async {
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .get()
-  //       .then((QuerySnapshot value) {
-  //     value.docs.forEach((result) {
-  //       userid == result['userId'] ? return User(result['userid'], result['username'], result['email']) : return null;
-  //     });
-  //   });
-  //   notifyListeners();
-  // }
+  List<UserC> _users = [];
 
   void submitAuthForm(
     String email,
@@ -56,7 +43,6 @@ class AuthProvider with ChangeNotifier {
             .collection('users')
             .doc(authResult.user.uid)
             .set({
-          'userid': FirebaseAuth.instance.currentUser.uid,
           'username': username,
           'email': email,
         });
@@ -78,6 +64,31 @@ class AuthProvider with ChangeNotifier {
     } catch (err) {
       print(err);
     }
+  }
+
+  Future<void> fetchUsersData() async {
+    await FirebaseFirestore.instance.collection('users').get().then(
+      (QuerySnapshot value) {
+        value.docs.forEach(
+          (result) {
+            _users.add(UserC(result.id, result['username'], result['email']));
+          },
+        );
+      },
+    );
+    notifyListeners();
+  }
+
+  String getusername() {
+    UserC _temp = _users.firstWhere(
+        (user) => user.userId == FirebaseAuth.instance.currentUser.uid);
+    return _temp.username;
+  }
+
+  String getemail() {
+    UserC _temp = _users.firstWhere(
+        (user) => user.userId == FirebaseAuth.instance.currentUser.uid);
+    return _temp.email;
   }
 
   notifyListeners();
