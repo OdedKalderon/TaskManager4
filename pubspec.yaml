@@ -27,13 +27,15 @@ dependencies:
   firebase_auth: ^4.2.5
   provider: ^6.0.5
   flutter_iconpicker: ^3.0.2
+  firebase_storage: ^11.1.2
+  image_picker: ^0.8.7+4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-dependency_overrides:
-  firebase_core_platform_interface: 4.5.2
+# dependency_overrides:
+#   firebase_core_platform_interface: 4.5.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

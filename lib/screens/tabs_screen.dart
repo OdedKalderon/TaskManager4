@@ -31,9 +31,8 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   void didChangeDependencies() async {
     await Provider.of<TaskProvider1>(context, listen: false).fetchTaskData();
-    Provider.of<TaskProvider1>(context, listen: false).getUrgents();
-    Provider.of<TaskProvider1>(context, listen: false).fetchTodoData();
-    Provider.of<AuthProvider>(context, listen: false).fetchUsersData();
+    await Provider.of<TaskProvider1>(context, listen: false).fetchTodoData();
+    await Provider.of<AuthProvider>(context, listen: false).fetchUsersData();
     super.didChangeDependencies();
   }
 
@@ -81,14 +80,5 @@ class _TabsScreenState extends State<TabsScreen> {
         ],
       ),
     );
-    // @override
-    // void didChangeDependencies() {
-    //   super.didChangeDependencies();
-    //   try {
-    //     Provider.of<TaskProvider1>(context, listen: false).fetchTaskData();
-    //   } catch (e) {
-    //     print(e);
-    //   }
-    // }
   }
 }

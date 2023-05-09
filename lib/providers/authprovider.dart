@@ -45,6 +45,8 @@ class AuthProvider with ChangeNotifier {
             .set({
           'username': username,
           'email': email,
+          'userProfileUrl':
+              'https://pbs.twimg.com/media/FGCpQkBXMAIqA6d.jpg:large',
         });
       }
       uid = authResult.user.uid;
@@ -71,17 +73,21 @@ class AuthProvider with ChangeNotifier {
       (QuerySnapshot value) {
         value.docs.forEach(
           (result) {
-            _users.add(UserC(result.id, result['username'], result['email']));
+            _users.add(UserC(result.id, result['username'], result['email'],
+                result['userProfileUrl']));
           },
         );
       },
     );
-    notifyListeners();
   }
 
   String getusername() {
     UserC _temp = _users.firstWhere(
-        (user) => user.userId == FirebaseAuth.instance.currentUser.uid);
+      (user) => user.userId == FirebaseAuth.instance.currentUser.uid,
+      orElse: () {
+        return null;
+      },
+    );
     return _temp.username;
   }
 
@@ -90,6 +96,4 @@ class AuthProvider with ChangeNotifier {
         (user) => user.userId == FirebaseAuth.instance.currentUser.uid);
     return _temp.email;
   }
-
-  notifyListeners();
 }

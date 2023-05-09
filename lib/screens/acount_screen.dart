@@ -1,10 +1,15 @@
 import 'dart:ffi';
+import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_complete_guide/widgets/user_image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../main_drawer.dart';
@@ -19,12 +24,49 @@ class AcountScreen extends StatefulWidget {
 }
 
 class _AcountScreenState extends State<AcountScreen> {
+  File _selectedImage;
+
   @override
   Widget build(BuildContext context) {
-    //User userinfo = fetchUserData(Provider.of<AuthProvider>(context, listen: false).Userid);
+    // final String _userName =
+    //     Provider.of<AuthProvider>(context, listen: true).getusername();
+    // final String _email =
+    //     Provider.of<AuthProvider>(context, listen: true).getemail();
     return Scaffold(
       appBar: AppBar(
         title: Text('Acount', style: TextStyle(fontWeight: FontWeight.w600)),
+        actions: [
+          IconButton(
+            icon: Icon(IconData(0xf0563, fontFamily: 'MaterialIcons')),
+            onPressed: () async {
+              if (_selectedImage == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('No Changes were made'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              } else {
+                await FirebaseStorage.instance
+                    .ref()
+                    .child('user_images')
+                    .child('${FirebaseAuth.instance.currentUser.uid}.jpg')
+                    .putFile(_selectedImage);
+                final imageUrl = await FirebaseStorage.instance
+                    .ref()
+                    .child('user_images')
+                    .child('${FirebaseAuth.instance.currentUser.uid}.jpg')
+                    .getDownloadURL();
+                FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(FirebaseAuth.instance.currentUser.uid)
+                    .update({
+                  'userProfileUrl': imageUrl,
+                });
+              }
+            },
+          )
+        ],
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       drawer: MainDrawer(),
@@ -36,48 +78,22 @@ class _AcountScreenState extends State<AcountScreen> {
           },
           child: ListView(
             children: [
-              Center(
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 130,
-                      height: 130,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                color: Colors.black.withOpacity(0.1),
-                                offset: Offset(0, 10))
-                          ],
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                "https://pbs.twimg.com/media/FGCpQkBXMAIqA6d.jpg:large",
-                              ))),
-                    ),
-                  ],
-                ),
-              ),
+              Center(child: UserImagePicker(
+                onPickImage: ((pickedImage) {
+                  _selectedImage = pickedImage;
+                }),
+              )),
               SizedBox(
                 height: 10,
               ),
               Column(
                 children: [
                   Text(
-                    '@' +
-                        Provider.of<AuthProvider>(context, listen: false)
-                            .getusername(),
+                    'x', //+ _userName,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: 4),
-                  Text(
-                      Provider.of<AuthProvider>(context, listen: false)
-                          .getemail(),
+                  Text('x', //_email,
                       style: TextStyle(fontSize: 16)),
                   SizedBox(
                     height: 30,
@@ -116,7 +132,7 @@ class _AcountScreenState extends State<AcountScreen> {
                     ],
                   ),
                   SizedBox(
-                    height: 35,
+                    height: 20,
                   ),
                   Container(
                     width: 155,

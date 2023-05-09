@@ -10,11 +10,11 @@ import '../models/todo_item.dart';
 class TaskProvider1 with ChangeNotifier {
   List<Task> _Tasks = [
     Task("randomid1", 'Test', 'This is a test task', '14/03/2023', false,
-        "7cinqzLA74U0eI8eWiIy5Bj2CeG3"),
+        "zBrn5No3OQdzKeJXsDlsyIrgCcX2"),
     Task("randomid2", 'Test 2', 'This is a test task 2', '31/03/2023', true,
-        "7cinqzLA74U0eI8eWiIy5Bj2CeG3"),
+        "zBrn5No3OQdzKeJXsDlsyIrgCcX2"),
     Task("randomid3", 'Test 3', 'This is a test task 3', '15/03/2023', false,
-        "7cinqzLA74U0eI8eWiIy5Bj2CeG3"),
+        "zBrn5No3OQdzKeJXsDlsyIrgCcX2"),
   ];
 
   List<Todo> _todolist = [
@@ -24,12 +24,14 @@ class TaskProvider1 with ChangeNotifier {
 
   List<Task> _urgentTasks = [];
 
-  void getUrgents() {
+  List<Task> getUrgents() {
+    List<Task> urgentTasks2 = [];
     for (int i = 0; i < _Tasks.length; i++) {
       if (_Tasks[i].IsUrgent == true) {
-        _urgentTasks.add(_Tasks[i]);
+        urgentTasks2.add(_Tasks[i]);
       }
     }
+    return urgentTasks2;
   }
 
   final _auth = FirebaseAuth.instance;
@@ -44,7 +46,7 @@ class TaskProvider1 with ChangeNotifier {
   }
 
   List<Task> get urgs {
-    return [..._urgentTasks];
+    return getUrgents();
   }
 
   void addTodoItems(
@@ -56,24 +58,24 @@ class TaskProvider1 with ChangeNotifier {
   }
 
   Future<String> submitAddTaskForm(
-      String name,
-      String description,
-      String dateDue,
-      bool isUrgent,
-      BuildContext ctx,
-      String Userid,
-      String tempid) async {
+    String name,
+    String description,
+    String dateDue,
+    bool isUrgent,
+    BuildContext ctx,
+    String Userid,
+  ) async {
     try {
-      await _database.collection('tasks').add({
+      _database.collection('tasks').add({
         'Name': name,
         'Description': description,
         'DateDue': dateDue,
         'IsUrgent': isUrgent,
         'UserId': Userid,
       }).then((DocumentReference doc) {
+        _Tasks.add(Task(doc.id, name, description, dateDue, isUrgent, Userid));
         return doc.id;
       });
-      _Tasks.add(Task(tempid, name, description, dateDue, isUrgent, Userid));
     } on PlatformException catch (err) {
       var message =
           'An error occurred, please check the information you inputed or try again later';

@@ -59,17 +59,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     if (isValid) {
       _formKey.currentState.save();
       _taskDateDue = DateFormat.yMMMd().format(_selectedDate);
-      String _tmpid = DateTime.now().millisecondsSinceEpoch.toString();
       String _tskid = await Provider.of<TaskProvider1>(context, listen: false)
           .submitAddTaskForm(
-              _taskName.trim(),
-              _taskDescription.trim(),
-              _taskDateDue,
-              _taskIsUrgent,
-              context,
-              FirebaseAuth.instance.currentUser.uid,
-              _tmpid);
-      //add todo's to firebase while taskId = _tskid and tempId = _tmpid
+        _taskName.trim(),
+        _taskDescription.trim(),
+        _taskDateDue,
+        _taskIsUrgent,
+        context,
+        FirebaseAuth.instance.currentUser.uid,
+      );
+      //add todo's to firebase while taskId = _tskid
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Task Was Successfully Added'),
@@ -102,7 +101,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         _taskDateDue = _selectedDate.toString();
       });
     });
-    print('...');
   }
 
   @override
