@@ -5,7 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 
 import '../models/todo_item.dart';
 
-class TodoItem extends StatelessWidget {
+class TodoItem extends StatefulWidget {
   final Todo todo;
   final isDone;
   final onDeleteItem;
@@ -14,25 +14,31 @@ class TodoItem extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<TodoItem> createState() => _TodoItemState();
+}
+
+class _TodoItemState extends State<TodoItem> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: ListTile(
         onTap: () {
-          isDone(todo);
+          widget.isDone(widget.todo);
         },
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         tileColor: Colors.white,
         leading: Icon(
-          todo.isDone ? Icons.check_box : Icons.check_box_outline_blank,
+          widget.todo.isDone ? Icons.check_box : Icons.check_box_outline_blank,
           color: Theme.of(context).primaryColor,
         ),
         title: Text(
-          todo.text,
+          widget.todo.text,
           style: TextStyle(
               fontSize: 16,
               color: Colors.black,
-              decoration: !todo.isDone ? null : TextDecoration.lineThrough),
+              decoration:
+                  !widget.todo.isDone ? null : TextDecoration.lineThrough),
         ),
         trailing: Container(
           padding: EdgeInsets.all(0),
@@ -46,7 +52,7 @@ class TodoItem extends StatelessWidget {
             color: Colors.white,
             iconSize: 18,
             onPressed: () {
-              onDeleteItem(todo.text);
+              widget.onDeleteItem(widget.todo.todoId);
             },
           ),
         ),

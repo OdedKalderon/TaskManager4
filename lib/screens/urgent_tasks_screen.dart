@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/taskprovider.dart';
 import '../main_drawer.dart';
+import 'display_task_screen.dart';
 
 class UrgentsScreen extends StatelessWidget {
   const UrgentsScreen({Key key}) : super(key: key);
@@ -46,17 +47,12 @@ class UrgentsScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   const Text(
-                    'Start adding some by clicking the urgent',
+                    'Start adding some by clicking the urgent switch in the task creating & editing page',
                     style: TextStyle(
                       fontSize: 16,
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                  const Text(
-                    'switch in  the task creating & editing page',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  )
                 ],
               ),
             )
@@ -85,6 +81,13 @@ class UrgentsScreen extends StatelessWidget {
                       return Column(
                         children: [
                           ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: ((context) => DisplayTaskScreen(
+                                          task: urgs[index]))));
+                            },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             contentPadding: EdgeInsets.symmetric(

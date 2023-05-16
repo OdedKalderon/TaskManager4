@@ -13,16 +13,12 @@ class TaskProvider1 with ChangeNotifier {
         "zBrn5No3OQdzKeJXsDlsyIrgCcX2"),
     Task("randomid2", 'Test 2', 'This is a test task 2', '31/03/2023', true,
         "zBrn5No3OQdzKeJXsDlsyIrgCcX2"),
-    Task("randomid3", 'Test 3', 'This is a test task 3', '15/03/2023', false,
-        "zBrn5No3OQdzKeJXsDlsyIrgCcX2"),
   ];
 
   List<Todo> _todolist = [
     Todo("randomtodoid1", 'KQ0CNENVcc3cUowaDv2j', 'Baloons', false),
     Todo("randomtodoid2", 'KQ0CNENVcc3cUowaDv2j', 'Cake', false)
   ];
-
-  List<Task> _urgentTasks = [];
 
   List<Task> getUrgents() {
     List<Task> urgentTasks2 = [];
@@ -45,6 +41,16 @@ class TaskProvider1 with ChangeNotifier {
     return myTasks;
   }
 
+  List<Todo> getTaskTodos(String taskUid, List<Todo> alltodos) {
+    List<Todo> taskTodos = [];
+    for (int i = 0; i < alltodos.length; i++) {
+      if (alltodos[i].taskId == taskUid) {
+        taskTodos.add(alltodos[i]);
+      }
+    }
+    return taskTodos;
+  }
+
   final _auth = FirebaseAuth.instance;
   final _database = FirebaseFirestore.instance;
 
@@ -63,8 +69,10 @@ class TaskProvider1 with ChangeNotifier {
   void addTodoItems(String taskid, String inputtext, bool isdone) async {
     await _database
         .collection('todos')
-        .add({'isDone': isdone, 'text': inputtext, 'taskId': taskid});
-    _todolist.add(Todo(null, taskid, inputtext, isdone));
+        .add({'isDone': isdone, 'text': inputtext, 'taskId': taskid}).then(
+            (DocumentReference doc) {
+      _todolist.add(Todo(doc.id, taskid, inputtext, isdone));
+    });
   }
 
   Future<String> submitAddTaskForm(
@@ -76,7 +84,8 @@ class TaskProvider1 with ChangeNotifier {
     String Userid,
   ) async {
     try {
-      _database.collection('tasks').add({
+      String docid;
+      await _database.collection('tasks').add({
         'Name': name,
         'Description': description,
         'DateDue': dateDue,
@@ -84,8 +93,9 @@ class TaskProvider1 with ChangeNotifier {
         'UserId': Userid,
       }).then((DocumentReference doc) {
         _Tasks.add(Task(doc.id, name, description, dateDue, isUrgent, Userid));
-        return doc.id;
+        docid = doc.id;
       });
+      return docid;
     } on PlatformException catch (err) {
       var message =
           'An error occurred, please check the information you inputed or try again later';
@@ -100,8 +110,10 @@ class TaskProvider1 with ChangeNotifier {
           backgroundColor: Theme.of(ctx).errorColor,
         ),
       );
+      return null;
     } catch (err) {
       print(err);
+      return null;
     }
   }
 

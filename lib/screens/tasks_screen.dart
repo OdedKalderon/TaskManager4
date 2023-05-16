@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_complete_guide/main_drawer.dart';
 import 'package:flutter_complete_guide/screens/add_task_screen.dart';
+import 'package:flutter_complete_guide/screens/display_task_screen.dart';
 import 'package:flutter_iconpicker/IconPicker/Packs/Cupertino.dart';
 import 'package:provider/provider.dart';
 
@@ -69,6 +70,14 @@ class _TasksScreenState extends State<TasksScreen> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10)),
                                 child: ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: ((context) =>
+                                                DisplayTaskScreen(
+                                                    task: tasks[index]))));
+                                  },
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15)),
                                   contentPadding: EdgeInsets.symmetric(
@@ -138,9 +147,9 @@ class _TasksScreenState extends State<TasksScreen> {
               ))
           : Center(
               child: Text(
-              'You don\'t have any tasks to be done \n               start adding some!',
-              style: TextStyle(fontSize: 20),
-            )),
+                  'You don\'t have any tasks to be done\nstart adding some!',
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center)),
     );
   }
 }
