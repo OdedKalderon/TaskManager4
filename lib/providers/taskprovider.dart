@@ -27,11 +27,22 @@ class TaskProvider1 with ChangeNotifier {
   List<Task> getUrgents() {
     List<Task> urgentTasks2 = [];
     for (int i = 0; i < _Tasks.length; i++) {
-      if (_Tasks[i].IsUrgent == true) {
+      if (_Tasks[i].IsUrgent == true &&
+          _Tasks[i].UserId == FirebaseAuth.instance.currentUser.uid) {
         urgentTasks2.add(_Tasks[i]);
       }
     }
     return urgentTasks2;
+  }
+
+  List<Task> getMyTasks() {
+    List<Task> myTasks = [];
+    for (int i = 0; i < _Tasks.length; i++) {
+      if (_Tasks[i].UserId == FirebaseAuth.instance.currentUser.uid) {
+        myTasks.add(_Tasks[i]);
+      }
+    }
+    return myTasks;
   }
 
   final _auth = FirebaseAuth.instance;
@@ -49,12 +60,11 @@ class TaskProvider1 with ChangeNotifier {
     return getUrgents();
   }
 
-  void addTodoItems(
-      String taskid, String inputtext, bool isdone, String tempid) async {
+  void addTodoItems(String taskid, String inputtext, bool isdone) async {
     await _database
         .collection('todos')
         .add({'isDone': isdone, 'text': inputtext, 'taskId': taskid});
-    _todolist.add(Todo(null, tempid, inputtext, isdone));
+    _todolist.add(Todo(null, taskid, inputtext, isdone));
   }
 
   Future<String> submitAddTaskForm(

@@ -25,6 +25,10 @@ class AddTaskScreen extends StatefulWidget {
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  final _nameContorller = TextEditingController();
+  final _descriptionContorller = TextEditingController();
+
   String _taskName = '';
   String _taskDescription = '';
   String _taskDateDue = '';
@@ -69,7 +73,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         FirebaseAuth.instance.currentUser.uid,
       );
       //add todo's to firebase while taskId = _tskid
-      Navigator.of(context).pop();
+
+      _newtodos = [];
+      _selectedDate = null;
+      _taskName = '';
+      _taskDescription = '';
+      _taskDateDue = '';
+      _taskIsUrgent = false;
+      _descriptionContorller.clear();
+      _nameContorller.clear();
+
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Task Was Successfully Added'),
         duration: Duration(seconds: 3),
@@ -118,33 +131,63 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               padding: const EdgeInsets.all(14.0),
               child: Column(
                 children: [
-                  TextFormField(
-                    validator: (nameValue) {
-                      if (nameValue == null || nameValue.trim().isEmpty) {
-                        return 'Please enter a name';
-                      } else if (nameValue.length > 20) {
-                        return 'Name can be up to 20 characters long';
-                      }
-                      return null;
-                    },
-                    cursorColor: Theme.of(context).accentColor,
-                    decoration: InputDecoration(
-                      labelText: 'Add Task Name',
-                      border: OutlineInputBorder(),
-                    ),
-                    onSaved: (nameFieldValue) =>
-                        setState(() => _taskName = nameFieldValue),
-                    textInputAction: TextInputAction.next,
-                    maxLength: 20,
-                    onFieldSubmitted: ((_) {
-                      FocusScope.of(context)
-                          .requestFocus(_descriptionFocusNode);
-                    }),
+                  Row(
+                    children: [
+                      Container(
+                        width: 320,
+                        alignment: Alignment.centerLeft,
+                        child: TextFormField(
+                          controller: _nameContorller,
+                          validator: (nameValue) {
+                            if (nameValue == null || nameValue.trim().isEmpty) {
+                              return 'Please enter a name';
+                            } else if (nameValue.length > 20) {
+                              return 'Name can be up to 20 characters long';
+                            }
+                            return null;
+                          },
+                          cursorColor: Theme.of(context).accentColor,
+                          decoration: InputDecoration(
+                            labelText: 'Add Task Name',
+                            border: OutlineInputBorder(),
+                          ),
+                          onSaved: (nameFieldValue) =>
+                              setState(() => _taskName = nameFieldValue),
+                          textInputAction: TextInputAction.next,
+                          maxLength: 20,
+                          onFieldSubmitted: ((_) {
+                            FocusScope.of(context)
+                                .requestFocus(_descriptionFocusNode);
+                          }),
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            width: 62,
+                            height: 62,
+                            alignment: Alignment.topRight,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.share,
+                                size: 40,
+                                color: Theme.of(context).accentColor,
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: 5,
                   ),
                   TextFormField(
+                    controller: _descriptionContorller,
                     validator: (descriptionValue) {
                       if (descriptionValue == null ||
                           descriptionValue.trim().isEmpty) {

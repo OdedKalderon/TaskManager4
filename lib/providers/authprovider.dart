@@ -96,4 +96,10 @@ class AuthProvider with ChangeNotifier {
         (user) => user.userId == FirebaseAuth.instance.currentUser.uid);
     return _temp.email;
   }
+
+  String getProfileUrl() {
+    UserC _temp = _users.firstWhere(
+        (user) => user.userId == FirebaseAuth.instance.currentUser.uid);
+    return _temp.userProfileUrl;
+  }
 }

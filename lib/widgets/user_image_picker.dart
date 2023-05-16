@@ -6,6 +6,9 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/authprovider.dart';
 
 class UserImagePicker extends StatefulWidget {
   const UserImagePicker({Key key, this.onPickImage}) : super(key: key);
@@ -46,11 +49,9 @@ class _UserImagePickerState extends State<UserImagePicker> {
       children: [
         CircleAvatar(
           radius: 70,
-          backgroundImage: _pickedImageFile == null
-              ? NetworkImage(
-                  "https://pbs.twimg.com/media/FGCpQkBXMAIqA6d.jpg:large",
-                )
-              : null, //NetworkImage(get current user userProfileUrl)
+          backgroundImage: NetworkImage(
+            Provider.of<AuthProvider>(context, listen: true).getProfileUrl(),
+          ),
           foregroundImage:
               _pickedImageFile != null ? FileImage(_pickedImageFile) : null,
         ),

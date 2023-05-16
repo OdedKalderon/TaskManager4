@@ -4,7 +4,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/screens/acount_screen.dart';
-import 'package:flutter_complete_guide/screens/inbox_screen.dart';
+import 'package:flutter_complete_guide/screens/social_screen.dart';
 import 'package:flutter_complete_guide/screens/add_task_tab.dart';
 import 'package:flutter_complete_guide/screens/urgent_tasks_screen.dart';
 import 'package:flutter_iconpicker/IconPicker/Packs/Cupertino.dart';
@@ -23,7 +23,7 @@ class _TabsScreenState extends State<TabsScreen> {
     TasksScreen(),
     UrgentsScreen(),
     AddTaskTab(),
-    InboxScreen(),
+    SocialScreen(),
     AcountScreen()
   ];
   int _selectedPageIndex = 3;
@@ -69,8 +69,8 @@ class _TabsScreenState extends State<TabsScreen> {
               label: 'Add New Task',
               backgroundColor: Theme.of(context).primaryColor),
           BottomNavigationBarItem(
-              icon: Icon(Icons.inbox),
-              label: 'Inbox',
+              icon: Icon(IconData(0xf005c, fontFamily: 'MaterialIcons')),
+              label: 'Social',
               backgroundColor: Theme.of(context).primaryColor),
           BottomNavigationBarItem(
               icon: Icon(IconData(0xf419,

@@ -28,10 +28,9 @@ class _AcountScreenState extends State<AcountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final String _userName =
-    //     Provider.of<AuthProvider>(context, listen: true).getusername();
-    // final String _email =
-    //     Provider.of<AuthProvider>(context, listen: true).getemail();
+    String _userName =
+        Provider.of<AuthProvider>(context, listen: true).getusername();
+    String _email = Provider.of<AuthProvider>(context, listen: true).getemail();
     return Scaffold(
       appBar: AppBar(
         title: Text('Acount', style: TextStyle(fontWeight: FontWeight.w600)),
@@ -89,65 +88,23 @@ class _AcountScreenState extends State<AcountScreen> {
               Column(
                 children: [
                   Text(
-                    'x', //+ _userName,
+                    '@' + _userName,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: 4),
-                  Text('x', //_email,
-                      style: TextStyle(fontSize: 16)),
+                  Text(_email, style: TextStyle(fontSize: 16)),
                   SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius: BorderRadius.circular(15)),
-                        alignment: Alignment.center,
-                        width: 169,
-                        height: 360,
-                        child: Text('List of Friends'),
-                        //THIS WILL BE CHANGED WITH A SCROLLABLE
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius: BorderRadius.circular(15)),
-                        alignment: Alignment.center,
-                        width: 169,
-                        height: 360,
-                        child: Text('2 week history tasks '),
-                        //THIS WILL BE CHANGED WITH A SCROLLABLE
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
+                    height: 40,
                   ),
                   Container(
-                    width: 155,
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        child: Row(
-                          children: [
-                            Icon(Icons.person_add_alt),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Text('Add A Friend')
-                          ],
-                        )),
+                    decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(15)),
+                    alignment: Alignment.center,
+                    width: 280,
+                    height: 400,
+                    child: Text('2 week history tasks '),
+                    //THIS WILL BE CHANGED WITH A SCROLLABLE
                   ),
                 ],
               ),
