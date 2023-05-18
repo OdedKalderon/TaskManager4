@@ -21,10 +21,10 @@ class UserImagePicker extends StatefulWidget {
 class _UserImagePickerState extends State<UserImagePicker> {
   File _pickedImageFile;
 
-  void _pickImage() async {
+  void _pickImage(String source) async {
     final pickedImage = await ImagePicker().pickImage(
-        source: ImageSource.camera,
-        imageQuality: 50,
+        source: source == 'camera' ? ImageSource.camera : ImageSource.gallery,
+        imageQuality: 65,
         maxWidth: 150); //could be gallery instead of camera
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -72,7 +72,38 @@ class _UserImagePickerState extends State<UserImagePicker> {
               child: IconButton(
                 icon: Icon(Icons.edit),
                 color: Colors.white,
-                onPressed: _pickImage,
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: ((ctx) => AlertDialog(
+                            title: Text('Pick Image Source'),
+                            content: Text(
+                              'Where do you want to take your image from?',
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(ctx).pop(true);
+                                },
+                              ),
+                              TextButton(
+                                child: Text('Camera'),
+                                onPressed: () async {
+                                  await _pickImage('camera');
+                                  Navigator.of(ctx).pop(true);
+                                },
+                              ),
+                              TextButton(
+                                child: Text('Gallery'),
+                                onPressed: () async {
+                                  await _pickImage('gallery');
+                                  Navigator.of(ctx).pop(true);
+                                },
+                              ),
+                            ],
+                          )));
+                },
               ),
             )),
       ],

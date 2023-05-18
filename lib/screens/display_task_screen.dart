@@ -20,6 +20,8 @@ class DisplayTaskScreen extends StatefulWidget {
 
 class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
   List<Todo> myTodos = [];
+  List<Todo> updatedTodos = [];
+  final _todoController = TextEditingController();
 
   void _todoDone(Todo todo) {
     setState(() {
@@ -33,11 +35,20 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
     });
   }
 
+  void _addTodo(String todo) {
+    setState(() {
+      updatedTodos.add(Todo(DateTime.now().millisecondsSinceEpoch.toString(),
+          widget.task.TaskId, todo, false));
+      _todoController.clear();
+      FocusManager.instance.primaryFocus?.unfocus();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Todo> allTodos =
         Provider.of<TaskProvider1>(context, listen: false).todos;
-    myTodos = Provider.of<TaskProvider1>(context, listen: false)
+    myTodos = updatedTodos = Provider.of<TaskProvider1>(context, listen: false)
         .getTaskTodos(widget.task.TaskId, allTodos);
     return Scaffold(
       appBar: AppBar(
@@ -91,31 +102,85 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                         IconData(0xf65a,
                             fontFamily: iconFont, fontPackage: iconFontPackage),
                         color: Colors.red,
-                        size: 20,
+                        size: 25,
                       )
                     : Icon(
                         IconData(0xf65a,
                             fontFamily: iconFont, fontPackage: iconFontPackage),
                         color: Colors.grey,
-                        size: 20,
+                        size: 25,
                       ),
-                Container(
-                    padding: EdgeInsets.all(10),
-                    width: double.infinity,
-                    height: 240,
-                    child: ListView(
-                      children: [
-                        for (Todo todoo in myTodos)
-                          TodoItem(
-                            todo: todoo,
-                            isDone: _todoDone,
-                            onDeleteItem: _deleteToDoItem,
-                          )
-                      ],
-                    )),
               ],
             ),
-          )
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 20, right: 20, left: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0, 0),
+                            blurRadius: 6,
+                            spreadRadius: 0),
+                      ],
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextField(
+                    controller: _todoController,
+                    decoration: InputDecoration(
+                        hintText: 'Add a new todo item',
+                        border: InputBorder.none),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 20, right: 20),
+                child: ElevatedButton(
+                  child: Text(
+                    '+',
+                    style: TextStyle(fontSize: 40),
+                  ),
+                  onPressed: () {
+                    _todoController.text.isEmpty
+                        ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                'Please add a text to the to do field before adding one'),
+                            duration: Duration(seconds: 2),
+                          ))
+                        : setState(() {
+                            _addTodo(_todoController.text);
+                          });
+                    ;
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).accentColor,
+                      minimumSize: Size(60, 60),
+                      elevation: 6),
+                ),
+              )
+            ],
+          ),
+          Container(
+              padding: EdgeInsets.all(10),
+              width: double.infinity,
+              height: 350,
+              child: ListView(
+                children: [
+                  for (Todo todoo in updatedTodos)
+                    TodoItem(
+                      todo: todoo,
+                      isDone: _todoDone,
+                      onDeleteItem: _deleteToDoItem,
+                    )
+                ],
+              )),
         ]),
       ),
     );

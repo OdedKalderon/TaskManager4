@@ -118,6 +118,7 @@ class TaskProvider1 with ChangeNotifier {
   }
 
   Future<void> fetchTaskData() async {
+    _Tasks = [];
     await FirebaseFirestore.instance.collection('tasks').get().then(
       (QuerySnapshot value) {
         value.docs.forEach(
@@ -132,6 +133,7 @@ class TaskProvider1 with ChangeNotifier {
   }
 
   Future<void> fetchTodoData() async {
+    _todolist = [];
     await FirebaseFirestore.instance
         .collection('todos')
         .get()

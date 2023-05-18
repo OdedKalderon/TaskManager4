@@ -17,6 +17,10 @@ class AuthProvider with ChangeNotifier {
     return uid;
   }
 
+  List<UserC> get users {
+    return [..._users];
+  }
+
   List<UserC> _users = [];
 
   void submitAuthForm(
@@ -69,6 +73,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> fetchUsersData() async {
+    _users = [];
     await FirebaseFirestore.instance.collection('users').get().then(
       (QuerySnapshot value) {
         value.docs.forEach(
