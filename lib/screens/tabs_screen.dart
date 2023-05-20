@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_complete_guide/providers/socialprovider.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
+import 'package:flutter_complete_guide/providers/todoprovider.dart';
 import 'package:flutter_complete_guide/screens/acount_screen.dart';
 import 'package:flutter_complete_guide/screens/social_screen.dart';
 import 'package:flutter_complete_guide/screens/add_task_tab.dart';
@@ -31,8 +33,10 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   void didChangeDependencies() async {
     await Provider.of<TaskProvider1>(context, listen: false).fetchTaskData();
-    await Provider.of<TaskProvider1>(context, listen: false).fetchTodoData();
+    await Provider.of<TodoProvider>(context, listen: false).fetchTodoData();
     await Provider.of<AuthProvider>(context, listen: false).fetchUsersData();
+    await Provider.of<SocialProvider>(context, listen: false)
+        .fetchConnectionData();
     super.didChangeDependencies();
   }
 

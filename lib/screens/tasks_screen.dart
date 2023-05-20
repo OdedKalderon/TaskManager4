@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_complete_guide/main_drawer.dart';
+import 'package:flutter_complete_guide/providers/todoprovider.dart';
 import 'package:flutter_complete_guide/screens/add_task_screen.dart';
 import 'package:flutter_complete_guide/screens/display_task_screen.dart';
 import 'package:flutter_iconpicker/IconPicker/Packs/Cupertino.dart';
@@ -76,7 +77,14 @@ class _TasksScreenState extends State<TasksScreen> {
                                         MaterialPageRoute(
                                             builder: ((context) =>
                                                 DisplayTaskScreen(
-                                                    task: tasks[index]))));
+                                                  task: tasks[index],
+                                                  taskTodos: Provider.of<
+                                                              TodoProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .getTaskTodos(
+                                                          tasks[index].TaskId),
+                                                ))));
                                   },
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15)),

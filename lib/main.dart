@@ -1,12 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_complete_guide/providers/socialprovider.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/providers/authprovider.dart';
 
 import 'package:flutter_complete_guide/screens/auth_screen.dart';
 import 'package:flutter_complete_guide/screens/tabs_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'providers/todoprovider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +27,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: TaskProvider1(),
+        ),
+        ChangeNotifierProvider.value(
+          value: TodoProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: SocialProvider(),
         ),
       ],
       child: MaterialApp(

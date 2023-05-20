@@ -13,7 +13,6 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
-  bool _isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
   var _isLogin = true;
@@ -26,9 +25,6 @@ class _AuthScreenState extends State<AuthScreen> {
     FocusScope.of(context).unfocus();
 
     if (isValid) {
-      setState(() {
-        _isLoading = true;
-      });
       _formKey.currentState.save();
       Provider.of<AuthProvider>(context, listen: false).submitAuthForm(
           _userEmail.trim(),
@@ -36,6 +32,7 @@ class _AuthScreenState extends State<AuthScreen> {
           _userName.trim(),
           _isLogin,
           context);
+      //need to check how to set isloading to false when an error occures
     }
   }
 
@@ -106,23 +103,20 @@ class _AuthScreenState extends State<AuthScreen> {
                     },
                   ),
                   SizedBox(height: 12),
-                  if (_isLoading) CircularProgressIndicator(),
-                  if (!_isLoading)
-                    ElevatedButton(
-                      child: Text(_isLogin ? 'Login' : 'Signup'),
-                      onPressed: _trySubmit,
-                    ),
-                  if (!_isLoading)
-                    TextButton(
-                      child: Text(_isLogin
-                          ? 'Create new account'
-                          : 'I already have an account'),
-                      onPressed: () {
-                        setState(() {
-                          _isLogin = !_isLogin;
-                        });
-                      },
-                    )
+                  ElevatedButton(
+                    child: Text(_isLogin ? 'Login' : 'Signup'),
+                    onPressed: _trySubmit,
+                  ),
+                  TextButton(
+                    child: Text(_isLogin
+                        ? 'Create new account'
+                        : 'I already have an account'),
+                    onPressed: () {
+                      setState(() {
+                        _isLogin = !_isLogin;
+                      });
+                    },
+                  )
                 ],
               ),
             ),

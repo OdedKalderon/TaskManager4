@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/models/todo_item.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
+import 'package:flutter_complete_guide/providers/todoprovider.dart';
 import 'package:flutter_complete_guide/widgets/todoItem.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
@@ -80,7 +81,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       );
 
       for (Todo tudu in _newtodos) {
-        await Provider.of<TaskProvider1>(context, listen: false)
+        await Provider.of<TodoProvider>(context, listen: false)
             .addTodoItems(_tskid, tudu.text, tudu.isDone);
       }
 
@@ -93,6 +94,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         _taskIsUrgent = false;
         _descriptionContorller.clear();
         _nameContorller.clear();
+        _isLoading = false;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -301,7 +303,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                             : setState(() {
                                                 _addTodo(_todoController.text);
                                               });
-                                        ;
                                       },
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor:

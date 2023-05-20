@@ -3,6 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
+import 'package:flutter_complete_guide/providers/todoprovider.dart';
 import 'package:flutter_iconpicker/IconPicker/icons.dart';
 import 'package:provider/provider.dart';
 
@@ -12,15 +13,14 @@ import '../widgets/todoItem.dart';
 
 class DisplayTaskScreen extends StatefulWidget {
   final Task task;
-  const DisplayTaskScreen({Key key, @required this.task}) : super(key: key);
-
+  List<Todo> taskTodos;
+  DisplayTaskScreen({Key key, @required this.task, @required this.taskTodos})
+      : super(key: key);
   @override
   State<DisplayTaskScreen> createState() => _DisplayTaskScreenState();
 }
 
 class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
-  List<Todo> myTodos = [];
-  List<Todo> updatedTodos = [];
   final _todoController = TextEditingController();
 
   void _todoDone(Todo todo) {
@@ -29,27 +29,29 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
     });
   }
 
-  void _deleteToDoItem(String todoText) {
+  void _deleteToDoItem(String todoId) {
     setState(() {
-      myTodos.removeWhere((item) => item.text == todoText);
+      widget.taskTodos.removeWhere((item) => item.todoId == todoId);
     });
   }
 
   void _addTodo(String todo) {
     setState(() {
-      updatedTodos.add(Todo(DateTime.now().millisecondsSinceEpoch.toString(),
-          widget.task.TaskId, todo, false));
-      _todoController.clear();
-      FocusManager.instance.primaryFocus?.unfocus();
+      widget.taskTodos.add(Todo(
+          DateTime.now().millisecondsSinceEpoch.toString(),
+          widget.task.TaskId,
+          todo,
+          false));
     });
+    _todoController.clear();
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Todo> allTodos =
-        Provider.of<TaskProvider1>(context, listen: false).todos;
-    myTodos = updatedTodos = Provider.of<TaskProvider1>(context, listen: false)
-        .getTaskTodos(widget.task.TaskId, allTodos);
+    final List<Todo> _existing =
+        Provider.of<TodoProvider>(context, listen: false)
+            .getTaskTodos(widget.task.TaskId);
     return Scaffold(
       appBar: AppBar(
         title:
@@ -116,6 +118,15 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
           SizedBox(
             height: 15,
           ),
+          Container(
+            height: 80,
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            // child: listview horizontal of users that are shared in this task,
+          ),
+          SizedBox(
+            height: 15,
+          ),
           Row(
             children: [
               Expanded(
@@ -154,9 +165,8 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                                 'Please add a text to the to do field before adding one'),
                             duration: Duration(seconds: 2),
                           ))
-                        : setState(() {
-                            _addTodo(_todoController.text);
-                          });
+                        : _addTodo(_todoController.text);
+                    print(widget.taskTodos);
                     ;
                   },
                   style: ElevatedButton.styleFrom(
@@ -170,16 +180,40 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
           Container(
               padding: EdgeInsets.all(10),
               width: double.infinity,
-              height: 350,
+              height: 370,
               child: ListView(
                 children: [
-                  for (Todo todoo in updatedTodos)
+                  for (Todo todoo in widget.taskTodos)
                     TodoItem(
                       todo: todoo,
                       isDone: _todoDone,
                       onDeleteItem: _deleteToDoItem,
                     )
                 ],
+              )),
+          ElevatedButton(
+              onPressed: () async {
+                for (Todo tudu in _existing) {
+                  await Provider.of<TodoProvider>(context, listen: false)
+                      .deleteTodoItem(tudu.todoId);
+                }
+                for (Todo todo in widget.taskTodos) {
+                  await Provider.of<TodoProvider>(context, listen: false)
+                      .addTodoItems(widget.task.TaskId, todo.text, todo.isDone);
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Changes Were Saved Successfully'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              },
+              child: const Text(
+                'Save Changes',
+                style: TextStyle(fontSize: 16),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).accentColor,
               )),
         ]),
       ),

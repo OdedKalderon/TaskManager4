@@ -15,11 +15,6 @@ class TaskProvider1 with ChangeNotifier {
         "zBrn5No3OQdzKeJXsDlsyIrgCcX2"),
   ];
 
-  List<Todo> _todolist = [
-    Todo("randomtodoid1", 'KQ0CNENVcc3cUowaDv2j', 'Baloons', false),
-    Todo("randomtodoid2", 'KQ0CNENVcc3cUowaDv2j', 'Cake', false)
-  ];
-
   List<Task> getUrgents() {
     List<Task> urgentTasks2 = [];
     for (int i = 0; i < _Tasks.length; i++) {
@@ -41,16 +36,6 @@ class TaskProvider1 with ChangeNotifier {
     return myTasks;
   }
 
-  List<Todo> getTaskTodos(String taskUid, List<Todo> alltodos) {
-    List<Todo> taskTodos = [];
-    for (int i = 0; i < alltodos.length; i++) {
-      if (alltodos[i].taskId == taskUid) {
-        taskTodos.add(alltodos[i]);
-      }
-    }
-    return taskTodos;
-  }
-
   final _auth = FirebaseAuth.instance;
   final _database = FirebaseFirestore.instance;
 
@@ -58,21 +43,8 @@ class TaskProvider1 with ChangeNotifier {
     return [..._Tasks];
   }
 
-  List<Todo> get todos {
-    return [..._todolist];
-  }
-
   List<Task> get urgs {
     return getUrgents();
-  }
-
-  void addTodoItems(String taskid, String inputtext, bool isdone) async {
-    await _database
-        .collection('todos')
-        .add({'isDone': isdone, 'text': inputtext, 'taskId': taskid}).then(
-            (DocumentReference doc) {
-      _todolist.add(Todo(doc.id, taskid, inputtext, isdone));
-    });
   }
 
   Future<String> submitAddTaskForm(
@@ -129,20 +101,6 @@ class TaskProvider1 with ChangeNotifier {
         );
       },
     );
-    notifyListeners();
-  }
-
-  Future<void> fetchTodoData() async {
-    _todolist = [];
-    await FirebaseFirestore.instance
-        .collection('todos')
-        .get()
-        .then((QuerySnapshot value) {
-      value.docs.forEach((result) {
-        _todolist.add(Todo(
-            result.id, result['taskId'], result['text'], result['isDone']));
-      });
-    });
     notifyListeners();
   }
 }

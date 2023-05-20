@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/taskprovider.dart';
 import '../main_drawer.dart';
+import '../providers/todoprovider.dart';
 import 'display_task_screen.dart';
 
 class UrgentsScreen extends StatelessWidget {
@@ -86,7 +87,14 @@ class UrgentsScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: ((context) => DisplayTaskScreen(
-                                          task: urgs[index]))));
+                                            task: urgs[index],
+                                            taskTodos:
+                                                Provider.of<TodoProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .getTaskTodos(
+                                                        urgs[index].TaskId),
+                                          ))));
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),

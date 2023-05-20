@@ -54,7 +54,7 @@ class AuthProvider with ChangeNotifier {
         });
       }
       uid = authResult.user.uid;
-    } on PlatformException catch (err) {
+    } catch (err) {
       var message = 'An error occurred, please check your credentials!';
 
       if (err.message != null) {
@@ -84,6 +84,10 @@ class AuthProvider with ChangeNotifier {
         );
       },
     );
+  }
+
+  UserC getSpecificUser(String id) {
+    return _users.firstWhere((element) => element.userId == id);
   }
 
   String getusername() {
