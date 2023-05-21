@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_complete_guide/providers/socialprovider.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/providers/authprovider.dart';
+import 'package:flutter_complete_guide/providers/usertaskprovider.dart';
 
 import 'package:flutter_complete_guide/screens/auth_screen.dart';
 import 'package:flutter_complete_guide/screens/tabs_screen.dart';
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: SocialProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: UserTaskProvider(),
         ),
       ],
       child: MaterialApp(

@@ -2,9 +2,13 @@ import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/models/friend_connection.dart';
 import 'package:flutter_complete_guide/models/todo_item.dart';
+import 'package:flutter_complete_guide/models/user_task.dart';
+import 'package:flutter_complete_guide/providers/socialprovider.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/providers/todoprovider.dart';
+import 'package:flutter_complete_guide/providers/usertaskprovider.dart';
 import 'package:flutter_complete_guide/widgets/todoItem.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
@@ -13,6 +17,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_complete_guide/main_drawer.dart';
 
+import '../models/userc.dart';
 import '../providers/authprovider.dart';
 import '../providers/taskprovider.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +31,7 @@ class AddTaskScreen extends StatefulWidget {
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
   final _formKey = GlobalKey<FormState>();
+  List<UserC> sharedUsers = [];
 
   final _nameContorller = TextEditingController();
   final _descriptionContorller = TextEditingController();
@@ -84,6 +90,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         await Provider.of<TodoProvider>(context, listen: false)
             .addTodoItems(_tskid, tudu.text, tudu.isDone);
       }
+      for (UserC user in sharedUsers) {
+        await Provider.of<UserTaskProvider>(context, listen: false)
+            .addUserTask(_tskid, user.userId);
+      }
+      ;
 
       setState(() {
         _newtodos = [];
@@ -192,7 +203,181 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                       size: 40,
                                       color: Theme.of(context).accentColor,
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          builder: (BuildContext context) {
+                                            List<FriendConnection> connections =
+                                                Provider.of<SocialProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .getFriends();
+                                            List<UserC> searchableUsers = [];
+                                            for (FriendConnection connection
+                                                in connections) {
+                                              searchableUsers.add(Provider.of<
+                                                          AuthProvider>(context,
+                                                      listen: false)
+                                                  .getSpecificUser(Provider.of<
+                                                              SocialProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .getSpecificFriend(
+                                                          connection)));
+                                            }
+                                            ;
+                                            List<UserC> displayedList =
+                                                List.from(searchableUsers);
+                                            void updateList(String value) {
+                                              setState(() {
+                                                displayedList = searchableUsers
+                                                    .where((element) => element
+                                                        .username
+                                                        .toLowerCase()
+                                                        .contains(value
+                                                            .toLowerCase()))
+                                                    .toList();
+                                              });
+                                            }
+
+                                            ;
+                                            return StatefulBuilder(
+                                              builder: (context, state) {
+                                                return Padding(
+                                                  padding: EdgeInsets.all(16),
+                                                  child: Container(
+                                                    height: 650,
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          'Search for a user',
+                                                          style: TextStyle(
+                                                              color: Colors.grey
+                                                                  .shade600,
+                                                              fontSize: 22,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 20,
+                                                        ),
+                                                        TextField(
+                                                          onChanged: (value) {
+                                                            state(() {
+                                                              updateList(value);
+                                                            });
+                                                          },
+                                                          decoration: InputDecoration(
+                                                              filled: true,
+                                                              fillColor: Colors
+                                                                  .grey
+                                                                  .shade300,
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8),
+                                                                  borderSide:
+                                                                      BorderSide
+                                                                          .none),
+                                                              hintText:
+                                                                  'Search for a specific friend',
+                                                              prefixIcon: Icon(
+                                                                  Icons.search),
+                                                              prefixIconColor:
+                                                                  Colors.grey
+                                                                      .shade600),
+                                                          textInputAction:
+                                                              TextInputAction
+                                                                  .done,
+                                                        ),
+                                                        SizedBox(
+                                                          height: 20,
+                                                        ),
+                                                        Expanded(
+                                                            child: displayedList
+                                                                        .length ==
+                                                                    0
+                                                                ? Column(
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        height:
+                                                                            100,
+                                                                      ),
+                                                                      Center(
+                                                                        child:
+                                                                            Text(
+                                                                          'No result found',
+                                                                          style: TextStyle(
+                                                                              fontSize: 22,
+                                                                              fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  )
+                                                                : Container(
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                            10),
+                                                                    child: ListView
+                                                                        .builder(
+                                                                      itemCount:
+                                                                          displayedList
+                                                                              .length,
+                                                                      itemBuilder:
+                                                                          ((context,
+                                                                              index) {
+                                                                        return Column(
+                                                                          children: [
+                                                                            ListTile(
+                                                                                contentPadding: EdgeInsets.all(8),
+                                                                                title: Text(
+                                                                                  displayedList[index].username,
+                                                                                  style: TextStyle(fontWeight: FontWeight.w500),
+                                                                                ),
+                                                                                leading: CircleAvatar(
+                                                                                  backgroundImage: NetworkImage(displayedList[index].userProfileUrl),
+                                                                                ),
+                                                                                trailing: !sharedUsers.contains(displayedList[index])
+                                                                                    ? IconButton(
+                                                                                        onPressed: () {
+                                                                                          sharedUsers.add(displayedList[index]);
+                                                                                        },
+                                                                                        icon: Icon(Icons.check_box_outline_blank),
+                                                                                        color: Theme.of(context).primaryColor)
+                                                                                    : IconButton(
+                                                                                        icon: Icon(Icons.check_box),
+                                                                                        onPressed: () {
+                                                                                          sharedUsers.remove(displayedList[index]);
+                                                                                        },
+                                                                                        color: Theme.of(context).primaryColor,
+                                                                                      )),
+                                                                            SizedBox(
+                                                                              height: 8,
+                                                                            )
+                                                                          ],
+                                                                        );
+                                                                      }),
+                                                                    ),
+                                                                  ))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          });
+                                    },
                                   ),
                                 ),
                                 SizedBox(

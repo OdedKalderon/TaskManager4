@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_complete_guide/main_drawer.dart';
+import 'package:flutter_complete_guide/models/user_task.dart';
 import 'package:flutter_complete_guide/providers/todoprovider.dart';
+import 'package:flutter_complete_guide/providers/usertaskprovider.dart';
 import 'package:flutter_complete_guide/screens/add_task_screen.dart';
 import 'package:flutter_complete_guide/screens/display_task_screen.dart';
 import 'package:flutter_iconpicker/IconPicker/Packs/Cupertino.dart';
@@ -19,8 +21,22 @@ class TasksScreen extends StatefulWidget {
 class _TasksScreenState extends State<TasksScreen> {
   @override
   Widget build(BuildContext context) {
-    List<Task> tasks =
+    List<Task> getShared() {
+      List<Task> sharedtasks = [];
+      List<userTask> shared =
+          Provider.of<UserTaskProvider>(context, listen: false)
+              .getMyUserTasks();
+      for (userTask usertask in shared) {
+        sharedtasks.add(Provider.of<TaskProvider1>(context, listen: false)
+            .getSpecificTask(usertask.taskId));
+      }
+      return sharedtasks;
+    }
+
+    List<Task> Mytasks =
         Provider.of<TaskProvider1>(context, listen: false).getMyTasks();
+    List<Task> Sharedtasks = getShared();
+    List<Task> AllTasks = Mytasks + Sharedtasks;
     return Scaffold(
       appBar: AppBar(
         title: const Text('All Tasks',
@@ -39,7 +55,7 @@ class _TasksScreenState extends State<TasksScreen> {
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       drawer: MainDrawer(),
-      body: !tasks.isEmpty
+      body: !AllTasks.isEmpty
           ? Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: SingleChildScrollView(
@@ -77,23 +93,31 @@ class _TasksScreenState extends State<TasksScreen> {
                                         MaterialPageRoute(
                                             builder: ((context) =>
                                                 DisplayTaskScreen(
-                                                  task: tasks[index],
-                                                  taskTodos: Provider.of<
-                                                              TodoProvider>(
+                                                  task: AllTasks[index],
+                                                  taskTodos:
+                                                      Provider.of<TodoProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .getTaskTodos(
+                                                              AllTasks[index]
+                                                                  .TaskId),
+                                                  sharedUsers: Provider.of<
+                                                              UserTaskProvider>(
                                                           context,
                                                           listen: false)
-                                                      .getTaskTodos(
-                                                          tasks[index].TaskId),
+                                                      .getTaskUserTasks(
+                                                          AllTasks[index]
+                                                              .TaskId),
                                                 ))));
                                   },
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15)),
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 15),
-                                  title: tasks[index].IsUrgent
+                                  title: AllTasks[index].IsUrgent
                                       ? Row(
                                           children: [
-                                            Text(tasks[index].Name),
+                                            Text(AllTasks[index].Name),
                                             SizedBox(
                                               width: 10,
                                             ),
@@ -108,7 +132,7 @@ class _TasksScreenState extends State<TasksScreen> {
                                         )
                                       : Row(
                                           children: [
-                                            Text(tasks[index].Name),
+                                            Text(AllTasks[index].Name),
                                             SizedBox(
                                               width: 10,
                                             ),
@@ -122,19 +146,19 @@ class _TasksScreenState extends State<TasksScreen> {
                                           ],
                                         ),
                                   subtitle:
-                                      tasks[index].Description.length <= 35
+                                      AllTasks[index].Description.length <= 35
                                           ? Text(
-                                              tasks[index].Description +
+                                              AllTasks[index].Description +
                                                   '\nDate Due To: ' +
-                                                  tasks[index].DateDue,
+                                                  AllTasks[index].DateDue,
                                             )
-                                          : Text(tasks[index]
+                                          : Text(AllTasks[index]
                                                   .Description
                                                   .toString()
                                                   .substring(0, 36) +
                                               '... \n' +
                                               'Date Due To: ' +
-                                              tasks[index].DateDue),
+                                              AllTasks[index].DateDue),
                                   tileColor: Colors.white,
                                   trailing: Icon(IconData(0xf5d3,
                                       fontFamily: iconFont,
@@ -147,7 +171,7 @@ class _TasksScreenState extends State<TasksScreen> {
                             ],
                           );
                         },
-                        itemCount: tasks.length,
+                        itemCount: AllTasks.length,
                       ),
                     ),
                   ],

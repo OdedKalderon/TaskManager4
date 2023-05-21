@@ -6,6 +6,10 @@ import 'package:flutter_complete_guide/models/friend_connection.dart';
 class SocialProvider with ChangeNotifier {
   List<FriendConnection> _connections = [];
 
+  List<FriendConnection> get allConnections {
+    return [..._connections];
+  }
+
   String getSpecificConnectionId(String senderId, String recieverId) {
     for (int i = 0; i < _connections.length; i++) {
       if (_connections[i].SendingUserId == senderId &&
@@ -14,6 +18,17 @@ class SocialProvider with ChangeNotifier {
       }
     }
     return null;
+  }
+
+  FriendConnection getConnectionById(String userId) {
+    for (int i = 0; i < _connections.length; i++) {
+      if (_connections[i].SendingUserId ==
+              FirebaseAuth.instance.currentUser.uid &&
+          _connections[i].RecievingUserId == userId) {
+        return _connections[i];
+      }
+    }
+    return FriendConnection('fake', 'fake', 'fake', false);
   }
 
   String getSpecificFriend(FriendConnection connection) {

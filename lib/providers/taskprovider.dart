@@ -4,16 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_complete_guide/models/task.dart';
+import 'package:flutter_complete_guide/models/userc.dart';
 
 import '../models/todo_item.dart';
 
 class TaskProvider1 with ChangeNotifier {
-  List<Task> _Tasks = [
-    Task("randomid1", 'Test', 'This is a test task', '14/03/2023', false,
-        "zBrn5No3OQdzKeJXsDlsyIrgCcX2"),
-    Task("randomid2", 'Test 2', 'This is a test task 2', '31/03/2023', true,
-        "zBrn5No3OQdzKeJXsDlsyIrgCcX2"),
-  ];
+  List<Task> _Tasks = [];
 
   List<Task> getUrgents() {
     List<Task> urgentTasks2 = [];
@@ -34,6 +30,14 @@ class TaskProvider1 with ChangeNotifier {
       }
     }
     return myTasks;
+  }
+
+  Task getSpecificTask(String id) {
+    return _Tasks.firstWhere((element) => element.TaskId == id);
+  }
+
+  String getTaskManagerId(String taskid) {
+    return ((_Tasks.firstWhere((element) => element.TaskId == taskid)).UserId);
   }
 
   final _auth = FirebaseAuth.instance;

@@ -38,9 +38,10 @@ class _SocialScreenState extends State<SocialScreen> {
   @override
   Widget build(BuildContext context) {
     List<FriendConnection> allRequests =
-        Provider.of<SocialProvider>(context).getMyFriendRequests();
+        Provider.of<SocialProvider>(context, listen: true)
+            .getMyFriendRequests();
     List<FriendConnection> allFriends =
-        Provider.of<SocialProvider>(context).getFriends();
+        Provider.of<SocialProvider>(context, listen: true).getFriends();
     return Scaffold(
         appBar: AppBar(
           title: const Text('Social',
@@ -61,6 +62,17 @@ class _SocialScreenState extends State<SocialScreen> {
                               .users;
                       searchableUsers.removeWhere((item) =>
                           item.userId == FirebaseAuth.instance.currentUser.uid);
+                      for (FriendConnection connection in allFriends) {
+                        searchableUsers.removeWhere((item) =>
+                            item.userId ==
+                            (Provider.of<AuthProvider>(context, listen: false)
+                                    .getSpecificUser(
+                                        Provider.of<SocialProvider>(context,
+                                                listen: false)
+                                            .getSpecificFriend(connection)))
+                                .userId);
+                      }
+                      ;
                       List<UserC> displayedList = List.from(searchableUsers);
                       void updateList(String value) {
                         setState(() {
@@ -138,7 +150,6 @@ class _SocialScreenState extends State<SocialScreen> {
                                               child: ListView.builder(
                                                 itemCount: displayedList.length,
                                                 itemBuilder: ((context, index) {
-                                                  bool buttonState = false;
                                                   return Column(
                                                     children: [
                                                       ListTile(
@@ -159,8 +170,20 @@ class _SocialScreenState extends State<SocialScreen> {
                                                                             index]
                                                                         .userProfileUrl),
                                                           ),
-                                                          trailing: buttonState ==
-                                                                  false //doesn't work needs future fixing!!!!!!!!!!!!!!!!!!!!
+                                                          trailing: !Provider.of<
+                                                                          SocialProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          true)
+                                                                  .allConnections
+                                                                  .contains(Provider.of<
+                                                                              SocialProvider>(
+                                                                          context,
+                                                                          listen:
+                                                                              true)
+                                                                      .getConnectionById(
+                                                                          displayedList[index]
+                                                                              .userId)) //doesn't work needs future fixing!!!!!!!!!!!!!!!!!!!!
                                                               ? ElevatedButton(
                                                                   child: Text(
                                                                       'Friend Request'),
@@ -172,10 +195,6 @@ class _SocialScreenState extends State<SocialScreen> {
                                                                     FocusScope.of(
                                                                             context)
                                                                         .unfocus();
-                                                                    state(() {
-                                                                      buttonState =
-                                                                          true;
-                                                                    });
                                                                   },
                                                                 )
                                                               : OutlinedButton(
@@ -189,10 +208,6 @@ class _SocialScreenState extends State<SocialScreen> {
                                                                     FocusScope.of(
                                                                             context)
                                                                         .unfocus();
-                                                                    state(() {
-                                                                      buttonState =
-                                                                          false;
-                                                                    });
                                                                   },
                                                                 )),
                                                       SizedBox(
@@ -327,7 +342,7 @@ class _SocialScreenState extends State<SocialScreen> {
                   )),
             ),
             Container(
-                padding: EdgeInsets.fromLTRB(15, 20, 15, 10),
+                padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
                 child: allFriends.length == 0
                     ? Column(
                         children: [

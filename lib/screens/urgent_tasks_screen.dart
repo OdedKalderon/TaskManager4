@@ -7,9 +7,12 @@ import 'package:flutter_complete_guide/models/task.dart';
 import 'package:flutter_iconpicker/IconPicker/Packs/Cupertino.dart';
 import 'package:provider/provider.dart';
 
+import '../models/user_task.dart';
 import '../providers/taskprovider.dart';
 import '../main_drawer.dart';
 import '../providers/todoprovider.dart';
+import '../providers/usertaskprovider.dart';
+import 'add_task_screen.dart';
 import 'display_task_screen.dart';
 
 class UrgentsScreen extends StatelessWidget {
@@ -17,15 +20,44 @@ class UrgentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Task> urgs = Provider.of<TaskProvider1>(context, listen: false).urgs;
+    List<Task> getShared() {
+      List<Task> sharedtasks = [];
+      List<userTask> shared =
+          Provider.of<UserTaskProvider>(context, listen: false)
+              .getMyUserTasks();
+      for (userTask usertask in shared) {
+        if (Provider.of<TaskProvider1>(context, listen: false)
+                .getSpecificTask(usertask.taskId)
+                .IsUrgent ==
+            true) {
+          sharedtasks.add(Provider.of<TaskProvider1>(context, listen: false)
+              .getSpecificTask(usertask.taskId));
+        }
+      }
+      return sharedtasks;
+    }
+
+    List<Task> Urgs = Provider.of<TaskProvider1>(context, listen: false).urgs;
+    List<Task> shared = getShared();
+    List<Task> allurgs = Urgs + shared;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Urgents',
             style: TextStyle(fontWeight: FontWeight.w600)),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  pageBuilder: ((context, animation, secondaryAnimation) =>
+                      AddTaskScreen())));
+            },
+          )
+        ],
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       drawer: MainDrawer(),
-      body: urgs.isEmpty
+      body: allurgs.isEmpty
           ? Center(
               child: Column(
                 children: [
@@ -87,23 +119,26 @@ class UrgentsScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: ((context) => DisplayTaskScreen(
-                                            task: urgs[index],
-                                            taskTodos:
-                                                Provider.of<TodoProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .getTaskTodos(
-                                                        urgs[index].TaskId),
-                                          ))));
+                                          task: allurgs[index],
+                                          taskTodos: Provider.of<TodoProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .getTaskTodos(
+                                                  allurgs[index].TaskId),
+                                          sharedUsers: Provider.of<
+                                                      UserTaskProvider>(context,
+                                                  listen: false)
+                                              .getTaskUserTasks(
+                                                  allurgs[index].TaskId)))));
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 15),
-                            title: urgs[index].IsUrgent
+                            title: allurgs[index].IsUrgent
                                 ? Row(
                                     children: [
-                                      Text(urgs[index].Name),
+                                      Text(allurgs[index].Name),
                                       SizedBox(
                                         width: 10,
                                       ),
@@ -118,7 +153,7 @@ class UrgentsScreen extends StatelessWidget {
                                   )
                                 : Row(
                                     children: [
-                                      Text(urgs[index].Name),
+                                      Text(allurgs[index].Name),
                                       SizedBox(
                                         width: 10,
                                       ),
@@ -131,19 +166,19 @@ class UrgentsScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                            subtitle: urgs[index].Description.length <= 35
+                            subtitle: allurgs[index].Description.length <= 35
                                 ? Text(
-                                    urgs[index].Description +
+                                    allurgs[index].Description +
                                         '\nDate Due To: ' +
-                                        urgs[index].DateDue,
+                                        allurgs[index].DateDue,
                                   )
-                                : Text(urgs[index]
+                                : Text(allurgs[index]
                                         .Description
                                         .toString()
                                         .substring(0, 36) +
                                     '... \n' +
                                     'Date Due To: ' +
-                                    urgs[index].DateDue),
+                                    allurgs[index].DateDue),
                             tileColor: Colors.white,
                             trailing: Icon(IconData(0xf5d3,
                                 fontFamily: iconFont,
@@ -155,7 +190,7 @@ class UrgentsScreen extends StatelessWidget {
                         ],
                       );
                     },
-                    itemCount: urgs.length,
+                    itemCount: allurgs.length,
                   ),
                 ],
               )),

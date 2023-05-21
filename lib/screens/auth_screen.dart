@@ -78,8 +78,10 @@ class _AuthScreenState extends State<AuthScreen> {
                     TextFormField(
                       key: ValueKey('username'),
                       validator: (value) {
-                        if (value.trim().isEmpty || value.length < 4) {
-                          return 'Please enter at least 4 characters';
+                        if (value.trim().isEmpty ||
+                            value.length < 4 ||
+                            value.length > 15) {
+                          return 'Please enter a username that is between 4 to 15 characters long';
                         }
                         return null;
                       },

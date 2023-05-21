@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_complete_guide/models/user_task.dart';
+import 'package:flutter_complete_guide/providers/authprovider.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/providers/todoprovider.dart';
 import 'package:flutter_iconpicker/IconPicker/icons.dart';
@@ -9,12 +12,18 @@ import 'package:provider/provider.dart';
 
 import '../models/task.dart';
 import '../models/todo_item.dart';
+import '../models/userc.dart';
 import '../widgets/todoItem.dart';
 
 class DisplayTaskScreen extends StatefulWidget {
   final Task task;
   List<Todo> taskTodos;
-  DisplayTaskScreen({Key key, @required this.task, @required this.taskTodos})
+  List<userTask> sharedUsers;
+  DisplayTaskScreen(
+      {Key key,
+      @required this.task,
+      @required this.taskTodos,
+      @required this.sharedUsers})
       : super(key: key);
   @override
   State<DisplayTaskScreen> createState() => _DisplayTaskScreenState();
@@ -49,9 +58,23 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<UserC> getIncluded() {
+      List<UserC> included = [];
+      String managerId = Provider.of<TaskProvider1>(context, listen: false)
+          .getTaskManagerId(widget.task.TaskId);
+      included.add(Provider.of<AuthProvider>(context, listen: false)
+          .getSpecificUser(managerId));
+      for (userTask usertask in widget.sharedUsers) {
+        included.add(Provider.of<AuthProvider>(context, listen: false)
+            .getSpecificUser(usertask.userId));
+      }
+      return included;
+    }
+
     final List<Todo> _existing =
         Provider.of<TodoProvider>(context, listen: false)
             .getTaskTodos(widget.task.TaskId);
+    final List<UserC> _included = getIncluded();
     return Scaffold(
       appBar: AppBar(
         title:
@@ -120,9 +143,51 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
           ),
           Container(
             height: 80,
-            width: double.infinity,
+            width: 800,
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            // child: listview horizontal of users that are shared in this task,
+            child: widget.sharedUsers.length != 0
+                ? ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        height: 40,
+                        width: index != 0
+                            ? ((_included[index].username).length * 16) + 35.1
+                            : ((_included[index].username).length * 16) +
+                                60.1, // if time left check this
+                        child: Card(
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(_included[index].userProfileUrl),
+                            ),
+                            title: Text(
+                              _included[index].username,
+                              style: TextStyle(
+                                  color: Colors.grey.shade800, fontSize: 16),
+                            ),
+                            trailing: index == 0
+                                ? Icon(
+                                    IconData(0xf052b,
+                                        fontFamily: 'MaterialIcons'),
+                                    color: Colors.yellow.shade700,
+                                    size: 20,
+                                  )
+                                : null,
+                          ),
+                        ),
+                      );
+                    },
+                    itemCount: _included.length,
+                  )
+                : Center(
+                    child: Text(
+                      'This task isn\'t shared with anyone',
+                      style:
+                          TextStyle(color: Colors.grey.shade700, fontSize: 18),
+                    ),
+                  ),
           ),
           SizedBox(
             height: 15,
