@@ -23,6 +23,9 @@ class AuthProvider with ChangeNotifier {
 
   List<UserC> _users = [];
 
+  //input: users data (if sign up first time, also a username)
+  //output: if sign up then creates user then adds it to the database
+  //        if sign in then checks data with database and if valid sign in
   void submitAuthForm(
     String email,
     String password,
@@ -43,14 +46,10 @@ class AuthProvider with ChangeNotifier {
           email: email,
           password: password,
         );
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(authResult.user.uid)
-            .set({
+        await FirebaseFirestore.instance.collection('users').doc(authResult.user.uid).set({
           'username': username,
           'email': email,
-          'userProfileUrl':
-              'https://pbs.twimg.com/media/FGCpQkBXMAIqA6d.jpg:large',
+          'userProfileUrl': 'https://pbs.twimg.com/media/FGCpQkBXMAIqA6d.jpg:large',
         });
       }
       uid = authResult.user.uid;
@@ -72,24 +71,29 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  //input: none
+  //output: adds to a local memory list all users from database
   Future<void> fetchUsersData() async {
     _users = [];
     await FirebaseFirestore.instance.collection('users').get().then(
       (QuerySnapshot value) {
         value.docs.forEach(
           (result) {
-            _users.add(UserC(result.id, result['username'], result['email'],
-                result['userProfileUrl']));
+            _users.add(UserC(result.id, result['username'], result['email'], result['userProfileUrl']));
           },
         );
       },
     );
   }
 
+  //input: user id
+  //output: returns the whole instance (including the data) of the user with that specific id
   UserC getSpecificUser(String id) {
     return _users.firstWhere((element) => element.userId == id);
   }
 
+  //input: none
+  //output: returns the signed in user's username
   String getusername() {
     UserC _temp = _users.firstWhere(
       (user) => user.userId == FirebaseAuth.instance.currentUser.uid,
@@ -100,15 +104,17 @@ class AuthProvider with ChangeNotifier {
     return _temp.username;
   }
 
+  //input: none
+  //output: returns the signed in user's email
   String getemail() {
-    UserC _temp = _users.firstWhere(
-        (user) => user.userId == FirebaseAuth.instance.currentUser.uid);
+    UserC _temp = _users.firstWhere((user) => user.userId == FirebaseAuth.instance.currentUser.uid);
     return _temp.email;
   }
 
+  //input: none
+  //output: returns the signed in user's Profile picture url
   String getProfileUrl() {
-    UserC _temp = _users.firstWhere(
-        (user) => user.userId == FirebaseAuth.instance.currentUser.uid);
+    UserC _temp = _users.firstWhere((user) => user.userId == FirebaseAuth.instance.currentUser.uid);
     return _temp.userProfileUrl;
   }
 }

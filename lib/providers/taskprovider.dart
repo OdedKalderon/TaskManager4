@@ -11,17 +11,20 @@ import '../models/todo_item.dart';
 class TaskProvider1 with ChangeNotifier {
   List<Task> _Tasks = [];
 
+  //input: none
+  //output: a list of all the tasks that both the user that is signed in created and their status equals urgent.
   List<Task> getUrgents() {
     List<Task> urgentTasks2 = [];
     for (int i = 0; i < _Tasks.length; i++) {
-      if (_Tasks[i].IsUrgent == true &&
-          _Tasks[i].UserId == FirebaseAuth.instance.currentUser.uid) {
+      if (_Tasks[i].IsUrgent == true && _Tasks[i].UserId == FirebaseAuth.instance.currentUser.uid) {
         urgentTasks2.add(_Tasks[i]);
       }
     }
     return urgentTasks2;
   }
 
+  //input: none
+  //output: a list of all the tasks that the user that is signed in created.
   List<Task> getMyTasks() {
     List<Task> myTasks = [];
     for (int i = 0; i < _Tasks.length; i++) {
@@ -32,10 +35,14 @@ class TaskProvider1 with ChangeNotifier {
     return myTasks;
   }
 
+  //input: task id
+  //outhput: returns the whole instance (including the data) of the task with that specific id
   Task getSpecificTask(String id) {
     return _Tasks.firstWhere((element) => element.TaskId == id);
   }
 
+  //input: task id
+  //outhput: the id of the user who created the task with that specific task id
   String getTaskManagerId(String taskid) {
     return ((_Tasks.firstWhere((element) => element.TaskId == taskid)).UserId);
   }
@@ -51,6 +58,17 @@ class TaskProvider1 with ChangeNotifier {
     return getUrgents();
   }
 
+  //input: task's id
+  //output: deletes the task from both database and local memory
+  void deleteTask(String taskId) async {
+    await FirebaseFirestore.instance.collection('tasks').doc(taskId).delete();
+    _Tasks.removeWhere((element) => element.TaskId == taskId);
+    notifyListeners();
+  }
+
+  //input: task data from a form and the context of it
+  //output: tries to submit form then, creates the task, adds it to database and local memory, then returns the task's id (that was just created).
+  //        if cannot submit form an error message apears
   Future<String> submitAddTaskForm(
     String name,
     String description,
@@ -73,8 +91,7 @@ class TaskProvider1 with ChangeNotifier {
       });
       return docid;
     } on PlatformException catch (err) {
-      var message =
-          'An error occurred, please check the information you inputed or try again later';
+      var message = 'An error occurred, please check the information you inputed or try again later';
 
       if (err.message != null) {
         message = err.message;
@@ -93,14 +110,15 @@ class TaskProvider1 with ChangeNotifier {
     }
   }
 
+  //input: none
+  //output: adds to a local memory list all Tasks from database
   Future<void> fetchTaskData() async {
     _Tasks = [];
     await FirebaseFirestore.instance.collection('tasks').get().then(
       (QuerySnapshot value) {
         value.docs.forEach(
           (result) {
-            _Tasks.add(Task(result.id, result["Name"], result["Description"],
-                result["DateDue"], result["IsUrgent"], result["UserId"]));
+            _Tasks.add(Task(result.id, result["Name"], result["Description"], result["DateDue"], result["IsUrgent"], result["UserId"]));
           },
         );
       },

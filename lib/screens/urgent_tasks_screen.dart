@@ -20,18 +20,14 @@ class UrgentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //input: none
+    //output: returns a list of all the tasks that were both shared with the user signed in and their status is urgent
     List<Task> getShared() {
       List<Task> sharedtasks = [];
-      List<userTask> shared =
-          Provider.of<UserTaskProvider>(context, listen: false)
-              .getMyUserTasks();
+      List<userTask> shared = Provider.of<UserTaskProvider>(context, listen: false).getMyUserTasks();
       for (userTask usertask in shared) {
-        if (Provider.of<TaskProvider1>(context, listen: false)
-                .getSpecificTask(usertask.taskId)
-                .IsUrgent ==
-            true) {
-          sharedtasks.add(Provider.of<TaskProvider1>(context, listen: false)
-              .getSpecificTask(usertask.taskId));
+        if (Provider.of<TaskProvider1>(context, listen: false).getSpecificTask(usertask.taskId).IsUrgent == true) {
+          sharedtasks.add(Provider.of<TaskProvider1>(context, listen: false).getSpecificTask(usertask.taskId));
         }
       }
       return sharedtasks;
@@ -42,15 +38,12 @@ class UrgentsScreen extends StatelessWidget {
     List<Task> allurgs = Urgs + shared;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Urgents',
-            style: TextStyle(fontWeight: FontWeight.w600)),
+        title: const Text('Urgents', style: TextStyle(fontWeight: FontWeight.w600)),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).push(PageRouteBuilder(
-                  pageBuilder: ((context, animation, secondaryAnimation) =>
-                      AddTaskScreen())));
+              Navigator.of(context).push(PageRouteBuilder(pageBuilder: ((context, animation, secondaryAnimation) => AddTaskScreen())));
             },
           )
         ],
@@ -99,8 +92,7 @@ class UrgentsScreen extends StatelessWidget {
                       alignment: Alignment.topLeft,
                       child: Text(
                         'Uncompleted Urgent Tasks',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -120,21 +112,12 @@ class UrgentsScreen extends StatelessWidget {
                                   MaterialPageRoute(
                                       builder: ((context) => DisplayTaskScreen(
                                           task: allurgs[index],
-                                          taskTodos: Provider.of<TodoProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .getTaskTodos(
-                                                  allurgs[index].TaskId),
-                                          sharedUsers: Provider.of<
-                                                      UserTaskProvider>(context,
-                                                  listen: false)
-                                              .getTaskUserTasks(
-                                                  allurgs[index].TaskId)))));
+                                          taskTodos: Provider.of<TodoProvider>(context, listen: false).getTaskTodos(allurgs[index].TaskId),
+                                          sharedUsers:
+                                              Provider.of<UserTaskProvider>(context, listen: false).getTaskUserTasks(allurgs[index].TaskId)))));
                             },
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 15),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                            contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                             title: allurgs[index].IsUrgent
                                 ? Row(
                                     children: [
@@ -143,9 +126,7 @@ class UrgentsScreen extends StatelessWidget {
                                         width: 10,
                                       ),
                                       Icon(
-                                        IconData(0xf65a,
-                                            fontFamily: iconFont,
-                                            fontPackage: iconFontPackage),
+                                        IconData(0xf65a, fontFamily: iconFont, fontPackage: iconFontPackage),
                                         color: Colors.red,
                                         size: 20,
                                       )
@@ -158,9 +139,7 @@ class UrgentsScreen extends StatelessWidget {
                                         width: 10,
                                       ),
                                       Icon(
-                                        IconData(0xf65a,
-                                            fontFamily: iconFont,
-                                            fontPackage: iconFontPackage),
+                                        IconData(0xf65a, fontFamily: iconFont, fontPackage: iconFontPackage),
                                         color: Colors.grey,
                                         size: 20,
                                       ),
@@ -168,21 +147,11 @@ class UrgentsScreen extends StatelessWidget {
                                   ),
                             subtitle: allurgs[index].Description.length <= 35
                                 ? Text(
-                                    allurgs[index].Description +
-                                        '\nDate Due To: ' +
-                                        allurgs[index].DateDue,
+                                    allurgs[index].Description + '\nDate Due To: ' + allurgs[index].DateDue,
                                   )
-                                : Text(allurgs[index]
-                                        .Description
-                                        .toString()
-                                        .substring(0, 36) +
-                                    '... \n' +
-                                    'Date Due To: ' +
-                                    allurgs[index].DateDue),
+                                : Text(allurgs[index].Description.toString().substring(0, 36) + '... \n' + 'Date Due To: ' + allurgs[index].DateDue),
                             tileColor: Colors.white,
-                            trailing: Icon(IconData(0xf5d3,
-                                fontFamily: iconFont,
-                                fontPackage: iconFontPackage)),
+                            trailing: Icon(IconData(0xf5d3, fontFamily: iconFont, fontPackage: iconFontPackage)),
                           ),
                           SizedBox(
                             height: 10,

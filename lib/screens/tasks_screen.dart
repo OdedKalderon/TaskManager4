@@ -21,33 +21,28 @@ class TasksScreen extends StatefulWidget {
 class _TasksScreenState extends State<TasksScreen> {
   @override
   Widget build(BuildContext context) {
+    //input: none
+    //output: returns a list of all the tasks that were shared with the user signed in
     List<Task> getShared() {
       List<Task> sharedtasks = [];
-      List<userTask> shared =
-          Provider.of<UserTaskProvider>(context, listen: false)
-              .getMyUserTasks();
+      List<userTask> shared = Provider.of<UserTaskProvider>(context, listen: true).getMyUserTasks();
       for (userTask usertask in shared) {
-        sharedtasks.add(Provider.of<TaskProvider1>(context, listen: false)
-            .getSpecificTask(usertask.taskId));
+        sharedtasks.add(Provider.of<TaskProvider1>(context, listen: false).getSpecificTask(usertask.taskId));
       }
       return sharedtasks;
     }
 
-    List<Task> Mytasks =
-        Provider.of<TaskProvider1>(context, listen: false).getMyTasks();
+    List<Task> Mytasks = Provider.of<TaskProvider1>(context, listen: true).getMyTasks();
     List<Task> Sharedtasks = getShared();
     List<Task> AllTasks = Mytasks + Sharedtasks;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('All Tasks',
-            style: TextStyle(fontWeight: FontWeight.w600)),
+        title: const Text('All Tasks', style: TextStyle(fontWeight: FontWeight.w600)),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).push(PageRouteBuilder(
-                  pageBuilder: ((context, animation, secondaryAnimation) =>
-                      AddTaskScreen())));
+              Navigator.of(context).push(PageRouteBuilder(pageBuilder: ((context, animation, secondaryAnimation) => AddTaskScreen())));
             },
           )
         ],
@@ -67,8 +62,7 @@ class _TasksScreenState extends State<TasksScreen> {
                         alignment: Alignment.topLeft,
                         child: Text(
                           'Uncompleted Tasks',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -84,36 +78,21 @@ class _TasksScreenState extends State<TasksScreen> {
                           return Column(
                             children: [
                               Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10)),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
                                 child: ListTile(
                                   onTap: () {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: ((context) =>
-                                                DisplayTaskScreen(
+                                            builder: ((context) => DisplayTaskScreen(
                                                   task: AllTasks[index],
-                                                  taskTodos:
-                                                      Provider.of<TodoProvider>(
-                                                              context,
-                                                              listen: false)
-                                                          .getTaskTodos(
-                                                              AllTasks[index]
-                                                                  .TaskId),
-                                                  sharedUsers: Provider.of<
-                                                              UserTaskProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .getTaskUserTasks(
-                                                          AllTasks[index]
-                                                              .TaskId),
+                                                  taskTodos: Provider.of<TodoProvider>(context, listen: false).getTaskTodos(AllTasks[index].TaskId),
+                                                  sharedUsers:
+                                                      Provider.of<UserTaskProvider>(context, listen: false).getTaskUserTasks(AllTasks[index].TaskId),
                                                 ))));
                                   },
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 15),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                  contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                                   title: AllTasks[index].IsUrgent
                                       ? Row(
                                           children: [
@@ -122,9 +101,7 @@ class _TasksScreenState extends State<TasksScreen> {
                                               width: 10,
                                             ),
                                             Icon(
-                                              IconData(0xf65a,
-                                                  fontFamily: iconFont,
-                                                  fontPackage: iconFontPackage),
+                                              IconData(0xf65a, fontFamily: iconFont, fontPackage: iconFontPackage),
                                               color: Colors.red,
                                               size: 20,
                                             )
@@ -137,32 +114,22 @@ class _TasksScreenState extends State<TasksScreen> {
                                               width: 10,
                                             ),
                                             Icon(
-                                              IconData(0xf65a,
-                                                  fontFamily: iconFont,
-                                                  fontPackage: iconFontPackage),
+                                              IconData(0xf65a, fontFamily: iconFont, fontPackage: iconFontPackage),
                                               color: Colors.grey,
                                               size: 20,
                                             ),
                                           ],
                                         ),
-                                  subtitle:
-                                      AllTasks[index].Description.length <= 35
-                                          ? Text(
-                                              AllTasks[index].Description +
-                                                  '\nDate Due To: ' +
-                                                  AllTasks[index].DateDue,
-                                            )
-                                          : Text(AllTasks[index]
-                                                  .Description
-                                                  .toString()
-                                                  .substring(0, 36) +
-                                              '... \n' +
-                                              'Date Due To: ' +
-                                              AllTasks[index].DateDue),
+                                  subtitle: AllTasks[index].Description.length <= 35
+                                      ? Text(
+                                          AllTasks[index].Description + '\nDate Due To: ' + AllTasks[index].DateDue,
+                                        )
+                                      : Text(AllTasks[index].Description.toString().substring(0, 36) +
+                                          '... \n' +
+                                          'Date Due To: ' +
+                                          AllTasks[index].DateDue),
                                   tileColor: Colors.white,
-                                  trailing: Icon(IconData(0xf5d3,
-                                      fontFamily: iconFont,
-                                      fontPackage: iconFontPackage)),
+                                  trailing: Icon(IconData(0xf5d3, fontFamily: iconFont, fontPackage: iconFontPackage)),
                                 ),
                               ),
                               SizedBox(
@@ -178,10 +145,7 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
               ))
           : Center(
-              child: Text(
-                  'You don\'t have any tasks to be done\nstart adding some!',
-                  style: TextStyle(fontSize: 20),
-                  textAlign: TextAlign.center)),
+              child: Text('You don\'t have any tasks to be done\nstart adding some!', style: TextStyle(fontSize: 20), textAlign: TextAlign.center)),
     );
   }
 }

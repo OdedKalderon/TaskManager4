@@ -10,13 +10,15 @@ class TodoItem extends StatefulWidget {
   final isDone;
   final onDeleteItem;
 
-  const TodoItem({Key key, this.todo, this.isDone, this.onDeleteItem})
-      : super(key: key);
+  const TodoItem({Key key, this.todo, this.isDone, this.onDeleteItem}) : super(key: key);
 
   @override
   State<TodoItem> createState() => _TodoItemState();
 }
 
+//input: Todo item, delete function, set as done/undone function
+//output: creates a widget that shows a todo item, with a button to delete it (from input),
+//        and an onpressed function thats sets the items status as done/undone (from input)
 class _TodoItemState extends State<TodoItem> {
   @override
   Widget build(BuildContext context) {
@@ -34,19 +36,14 @@ class _TodoItemState extends State<TodoItem> {
         ),
         title: Text(
           widget.todo.text,
-          style: TextStyle(
-              fontSize: 16,
-              color: Colors.black,
-              decoration:
-                  !widget.todo.isDone ? null : TextDecoration.lineThrough),
+          style: TextStyle(fontSize: 16, color: Colors.black, decoration: !widget.todo.isDone ? null : TextDecoration.lineThrough),
         ),
         trailing: Container(
           padding: EdgeInsets.all(0),
           margin: EdgeInsets.symmetric(vertical: 12),
           height: 35,
           width: 35,
-          decoration: BoxDecoration(
-              color: Colors.red, borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(5)),
           child: IconButton(
             icon: Icon(Icons.delete),
             color: Colors.white,

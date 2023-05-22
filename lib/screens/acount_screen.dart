@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_complete_guide/models/finished_task.dart';
+import 'package:flutter_complete_guide/models/user_task.dart';
+import 'package:flutter_complete_guide/providers/finishedprovider.dart';
+import 'package:flutter_complete_guide/providers/usertaskprovider.dart';
 import 'package:flutter_complete_guide/widgets/user_image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -28,9 +32,25 @@ class _AcountScreenState extends State<AcountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String _userName =
-        Provider.of<AuthProvider>(context, listen: true).getusername();
-    String _email = Provider.of<AuthProvider>(context, listen: true).getemail();
+    String _userName = Provider.of<AuthProvider>(context, listen: false).getusername();
+    String _email = Provider.of<AuthProvider>(context, listen: false).getemail();
+
+    List<FinishedTask> getMyFinishedTasks() {
+      List<FinishedTask> myFinishedTasks = [];
+      List<userTask> myUserTasks = Provider.of<UserTaskProvider>(context, listen: true).getMyUserTasks();
+      List<FinishedTask> allFinishedTasks = Provider.of<FinishedProvider>(context, listen: true).finished;
+      for (FinishedTask finishedtask in allFinishedTasks) {
+        for (userTask usertask in myUserTasks) {
+          if (finishedtask.taskId == usertask.taskId || finishedtask.userId == FirebaseAuth.instance.currentUser.uid) {
+            myFinishedTasks.add(finishedtask);
+          }
+        }
+      }
+      return myFinishedTasks;
+    }
+
+    List<FinishedTask> _myFinished = getMyFinishedTasks();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Acount', style: TextStyle(fontWeight: FontWeight.w600)),
@@ -51,15 +71,9 @@ class _AcountScreenState extends State<AcountScreen> {
                     .child('user_images')
                     .child('${FirebaseAuth.instance.currentUser.uid}.jpg')
                     .putFile(_selectedImage);
-                final imageUrl = await FirebaseStorage.instance
-                    .ref()
-                    .child('user_images')
-                    .child('${FirebaseAuth.instance.currentUser.uid}.jpg')
-                    .getDownloadURL();
-                FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(FirebaseAuth.instance.currentUser.uid)
-                    .update({
+                final imageUrl =
+                    await FirebaseStorage.instance.ref().child('user_images').child('${FirebaseAuth.instance.currentUser.uid}.jpg').getDownloadURL();
+                FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).update({
                   'userProfileUrl': imageUrl,
                 });
               }
@@ -71,45 +85,73 @@ class _AcountScreenState extends State<AcountScreen> {
       drawer: MainDrawer(),
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: ListView(
-            children: [
-              Center(child: UserImagePicker(
-                onPickImage: ((pickedImage) {
-                  _selectedImage = pickedImage;
-                }),
-              )),
-              SizedBox(
-                height: 10,
-              ),
-              Column(
-                children: [
-                  Text(
-                    '@' + _userName,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(height: 4),
-                  Text(_email, style: TextStyle(fontSize: 16)),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(15)),
-                    alignment: Alignment.center,
-                    width: 280,
-                    height: 400,
-                    child: Text('2 week history tasks '),
-                    //THIS WILL BE CHANGED WITH A SCROLLABLE
-                  ),
-                ],
-              ),
-            ],
-          ),
+        child: Column(
+          children: [
+            Center(child: UserImagePicker(
+              onPickImage: ((pickedImage) {
+                _selectedImage = pickedImage;
+              }),
+            )),
+            SizedBox(
+              height: 10,
+            ),
+            Column(
+              children: [
+                Text(
+                  '@' + _userName,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(height: 4),
+                Text(_email, style: TextStyle(fontSize: 16)),
+                SizedBox(
+                  height: 40,
+                ),
+                Container(
+                  decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(15)),
+                  alignment: Alignment.center,
+                  width: 280,
+                  height: 400,
+                  child: _myFinished.length != 0
+                      ? ListView.builder(
+                          itemBuilder: (context, index) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Colors.white,
+                                  boxShadow: [BoxShadow(color: Colors.grey.shade900, offset: Offset(4, 4), blurRadius: 15, spreadRadius: 1)]),
+                              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                              child: Column(children: [
+                                Text(
+                                  _myFinished[index].taskName,
+                                  style: TextStyle(fontSize: 16, color: Colors.grey.shade800),
+                                ),
+                                Text(
+                                  _myFinished[index].dateDue,
+                                  style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                                ),
+                                Text(
+                                  _myFinished[index].dateFinished,
+                                  style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                                )
+                              ]),
+                            );
+                          },
+                          itemCount: _myFinished.length,
+                        )
+                      : Center(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                            child: Text(
+                              'You don\'t have any\nfinished tasks yet',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 22, color: Colors.grey.shade700),
+                            ),
+                          ),
+                        ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
