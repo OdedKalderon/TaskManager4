@@ -20,10 +20,7 @@ class MainDrawer extends StatelessWidget {
               color: Theme.of(context).accentColor,
               child: Text(
                 'Navigation',
-                style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 30,
-                    color: Colors.white),
+                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 30, color: Colors.white),
               )),
           SizedBox(
             height: 20,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_complete_guide/providers/finishedprovider.dart';
 import 'package:flutter_complete_guide/providers/socialprovider.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/providers/todoprovider.dart';
@@ -24,10 +23,10 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   final List<Widget> _pages = [TasksScreen(), UrgentsScreen(), AddTaskTab(), SocialScreen(), AcountScreen()];
-  int _selectedPageIndex = 3;
+  int _selectedPageIndex = 0;
 
   //input: none
-  //output: get from firebase all data necessary for the app,
+  //output: gets from firebase all data necessary for the app,
   //        therefore the app can run in 0 time (except initial load) if no changes were made.
   @override
   void didChangeDependencies() async {
@@ -36,7 +35,6 @@ class _TabsScreenState extends State<TabsScreen> {
     await Provider.of<TaskProvider1>(context, listen: false).fetchTaskData();
     await Provider.of<TodoProvider>(context, listen: false).fetchTodoData();
     await Provider.of<UserTaskProvider>(context, listen: false).fetchUserTaskData();
-    await Provider.of<FinishedProvider>(context, listen: false).fetchFinishedData();
     super.didChangeDependencies();
   }
 

@@ -23,13 +23,10 @@ class _UserImagePickerState extends State<UserImagePicker> {
 
   void _pickImage(String source) async {
     final pickedImage = await ImagePicker().pickImage(
-        source: source == 'camera' ? ImageSource.camera : ImageSource.gallery,
-        imageQuality: 65,
-        maxWidth: 150); //could be gallery instead of camera
+        source: source == 'camera' ? ImageSource.camera : ImageSource.gallery, imageQuality: 65, maxWidth: 150); //could be gallery instead of camera
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text(
-            'Don\'t forget to save changes in the SAVE button positioned up right'),
+        content: Text('Don\'t forget to save changes in the SAVE button positioned up right'),
         duration: Duration(seconds: 6),
       ),
     );
@@ -52,8 +49,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
           backgroundImage: NetworkImage(
             Provider.of<AuthProvider>(context, listen: true).getProfileUrl(),
           ),
-          foregroundImage:
-              _pickedImageFile != null ? FileImage(_pickedImageFile) : null,
+          foregroundImage: _pickedImageFile != null ? FileImage(_pickedImageFile) : null,
         ),
         Positioned(
             bottom: 0,

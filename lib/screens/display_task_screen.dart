@@ -5,7 +5,6 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_complete_guide/models/user_task.dart';
 import 'package:flutter_complete_guide/providers/authprovider.dart';
-import 'package:flutter_complete_guide/providers/finishedprovider.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/providers/todoprovider.dart';
 import 'package:flutter_complete_guide/providers/usertaskprovider.dart';
@@ -294,9 +293,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                     style: TextStyle(color: Colors.green.shade800),
                   ),
                   onPressed: () async {
-                    Provider.of<FinishedProvider>(context, listen: false).addFinishedTask(
-                        widget.task.TaskId, widget.task.UserId, widget.task.Name, widget.task.DateDue, (DateFormat.yMMMd().format(DateTime.now())));
-                    await Provider.of<TaskProvider1>(context, listen: false).deleteTask(widget.task.TaskId);
+                    Provider.of<TaskProvider1>(context, listen: false).setAsDone(widget.task.TaskId);
                     for (Todo tudu in widget.taskTodos) {
                       Provider.of<TodoProvider>(context, listen: false).deleteTodoItem(tudu.todoId);
                     }

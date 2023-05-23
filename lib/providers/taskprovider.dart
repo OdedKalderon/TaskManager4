@@ -11,12 +11,20 @@ import '../models/todo_item.dart';
 class TaskProvider1 with ChangeNotifier {
   List<Task> _Tasks = [];
 
+  //input: task id
+  //output: sets the task's isDone field (with that specific id) to true in both database and local memory.
+  void setAsDone(String taskid) async {
+    await FirebaseFirestore.instance.collection('tasks').doc(taskid).update({'isDone': true});
+    (_Tasks.firstWhere((element) => element.TaskId == taskid)).isDone = true;
+    notifyListeners();
+  }
+
   //input: none
   //output: a list of all the tasks that both the user that is signed in created and their status equals urgent.
   List<Task> getUrgents() {
     List<Task> urgentTasks2 = [];
     for (int i = 0; i < _Tasks.length; i++) {
-      if (_Tasks[i].IsUrgent == true && _Tasks[i].UserId == FirebaseAuth.instance.currentUser.uid) {
+      if (_Tasks[i].IsUrgent == true && _Tasks[i].UserId == FirebaseAuth.instance.currentUser.uid && _Tasks[i].isDone == false) {
         urgentTasks2.add(_Tasks[i]);
       }
     }
@@ -28,11 +36,23 @@ class TaskProvider1 with ChangeNotifier {
   List<Task> getMyTasks() {
     List<Task> myTasks = [];
     for (int i = 0; i < _Tasks.length; i++) {
-      if (_Tasks[i].UserId == FirebaseAuth.instance.currentUser.uid) {
+      if (_Tasks[i].UserId == FirebaseAuth.instance.currentUser.uid && _Tasks[i].isDone == false) {
         myTasks.add(_Tasks[i]);
       }
     }
     return myTasks;
+  }
+
+  //input: none
+  //output: returns a list of all tasks that the user signed in created and are done/finished.
+  List<Task> getFinishedTasks() {
+    List<Task> myFinishedTasks = [];
+    for (int i = 0; i < _Tasks.length; i++) {
+      if (_Tasks[i].UserId == FirebaseAuth.instance.currentUser.uid && _Tasks[i].isDone == true) {
+        myFinishedTasks.add(_Tasks[i]);
+      }
+    }
+    return myFinishedTasks;
   }
 
   //input: task id
@@ -85,8 +105,9 @@ class TaskProvider1 with ChangeNotifier {
         'DateDue': dateDue,
         'IsUrgent': isUrgent,
         'UserId': Userid,
+        'isDone': false,
       }).then((DocumentReference doc) {
-        _Tasks.add(Task(doc.id, name, description, dateDue, isUrgent, Userid));
+        _Tasks.add(Task(doc.id, name, description, dateDue, isUrgent, Userid, false));
         docid = doc.id;
       });
       return docid;
@@ -118,7 +139,8 @@ class TaskProvider1 with ChangeNotifier {
       (QuerySnapshot value) {
         value.docs.forEach(
           (result) {
-            _Tasks.add(Task(result.id, result["Name"], result["Description"], result["DateDue"], result["IsUrgent"], result["UserId"]));
+            _Tasks.add(
+                Task(result.id, result["Name"], result["Description"], result["DateDue"], result["IsUrgent"], result["UserId"], result["isDone"]));
           },
         );
       },

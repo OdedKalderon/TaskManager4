@@ -5,7 +5,7 @@ class Task {
   String Description;
   String DateDue;
   bool IsUrgent;
+  bool isDone;
 
-  Task(this.TaskId, this.Name, this.Description, this.DateDue, this.IsUrgent,
-      this.UserId);
+  Task(this.TaskId, this.Name, this.Description, this.DateDue, this.IsUrgent, this.UserId, this.isDone);
 }

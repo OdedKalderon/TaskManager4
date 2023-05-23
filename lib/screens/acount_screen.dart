@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_complete_guide/models/finished_task.dart';
 import 'package:flutter_complete_guide/models/user_task.dart';
-import 'package:flutter_complete_guide/providers/finishedprovider.dart';
+import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/providers/usertaskprovider.dart';
 import 'package:flutter_complete_guide/widgets/user_image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../main_drawer.dart';
+import '../models/task.dart' as task;
 import '../providers/authprovider.dart';
 import '../models/userc.dart';
 
@@ -35,21 +35,23 @@ class _AcountScreenState extends State<AcountScreen> {
     String _userName = Provider.of<AuthProvider>(context, listen: false).getusername();
     String _email = Provider.of<AuthProvider>(context, listen: false).getemail();
 
-    List<FinishedTask> getMyFinishedTasks() {
-      List<FinishedTask> myFinishedTasks = [];
+    //input: none
+    //output: returns a list of all tasks that their isDone field is true and were either created by or shared with the signed in user.
+    List<task.Task> getMyFinishedTasks() {
+      List<task.Task> myFinishedTasks = [];
+      List<task.Task> allFinishedTasks = Provider.of<TaskProvider1>(context).getFinishedTasks();
       List<userTask> myUserTasks = Provider.of<UserTaskProvider>(context, listen: true).getMyUserTasks();
-      List<FinishedTask> allFinishedTasks = Provider.of<FinishedProvider>(context, listen: true).finished;
-      for (FinishedTask finishedtask in allFinishedTasks) {
-        for (userTask usertask in myUserTasks) {
-          if (finishedtask.taskId == usertask.taskId || finishedtask.userId == FirebaseAuth.instance.currentUser.uid) {
-            myFinishedTasks.add(finishedtask);
-          }
+      List<task.Task> mySharedTasks = [];
+      for (userTask usettask in myUserTasks) {
+        if (Provider.of<TaskProvider1>(context).getSpecificTask(usettask.taskId).isDone == true) {
+          mySharedTasks.add(Provider.of<TaskProvider1>(context).getSpecificTask(usettask.taskId));
         }
       }
+      myFinishedTasks = allFinishedTasks + mySharedTasks;
       return myFinishedTasks;
     }
 
-    List<FinishedTask> _myFinished = getMyFinishedTasks();
+    List<task.Task> _myFinished = getMyFinishedTasks();
 
     return Scaffold(
       appBar: AppBar(
@@ -66,6 +68,7 @@ class _AcountScreenState extends State<AcountScreen> {
                   ),
                 );
               } else {
+                //adds to storage the picture as jpg file, then takes it's url and sets it in the user's signed in field userProfileUrl.
                 await FirebaseStorage.instance
                     .ref()
                     .child('user_images')
@@ -107,6 +110,13 @@ class _AcountScreenState extends State<AcountScreen> {
                   height: 40,
                 ),
                 Container(
+                  child: Text(
+                    'History Finished Task',
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600, fontWeight: FontWeight.bold),
+                  ),
+                  padding: EdgeInsets.only(bottom: 5),
+                ),
+                Container(
                   decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(15)),
                   alignment: Alignment.center,
                   width: 280,
@@ -118,19 +128,24 @@ class _AcountScreenState extends State<AcountScreen> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   color: Colors.white,
-                                  boxShadow: [BoxShadow(color: Colors.grey.shade900, offset: Offset(4, 4), blurRadius: 15, spreadRadius: 1)]),
+                                  boxShadow: [BoxShadow(color: Colors.grey.shade700, offset: Offset(0, 3), blurRadius: 5, spreadRadius: 1)]),
                               padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                               child: Column(children: [
                                 Text(
-                                  _myFinished[index].taskName,
-                                  style: TextStyle(fontSize: 16, color: Colors.grey.shade800),
+                                  _myFinished[index].Name,
+                                  style: TextStyle(fontSize: 16, color: Colors.grey.shade800, fontWeight: FontWeight.bold),
                                 ),
+                                _myFinished[index].Description.length <= 35
+                                    ? Text(
+                                        _myFinished[index].Description,
+                                        style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                                      )
+                                    : Text(
+                                        _myFinished[index].Description.toString().substring(0, 36) + '... ',
+                                        style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                                      ),
                                 Text(
-                                  _myFinished[index].dateDue,
-                                  style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
-                                ),
-                                Text(
-                                  _myFinished[index].dateFinished,
+                                  _myFinished[index].DateDue,
                                   style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
                                 )
                               ]),

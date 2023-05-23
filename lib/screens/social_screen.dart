@@ -21,11 +21,14 @@ class SocialScreen extends StatefulWidget {
 }
 
 class _SocialScreenState extends State<SocialScreen> {
+  //(provider function)
   void _setConnection(UserC user) {
     Provider.of<SocialProvider>(context, listen: false).addFriendConnection(user.userId);
     setState(() {});
   }
 
+  //input: user instance
+  //output: takes the connection between the user inputted and the user signed in and deletes it (provider function)
   void _deleteConnection(UserC user) {
     Provider.of<SocialProvider>(context, listen: false).deleteFriendConnection(
         Provider.of<SocialProvider>(context, listen: false).getSpecificConnectionId(FirebaseAuth.instance.currentUser.uid, user.userId));
@@ -83,6 +86,7 @@ class _SocialScreenState extends State<SocialScreen> {
                               leading: CircleAvatar(backgroundImage: NetworkImage(sender.userProfileUrl)),
                               trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                                 IconButton(
+                                  //:this fucntion sets the 2 user friend connection Status to true (also removes it from the friedn requests list)
                                   onPressed: () {
                                     setState(() {
                                       Provider.of<SocialProvider>(context, listen: false).establishConnection(allRequests[index].ConnectionId);
@@ -93,6 +97,7 @@ class _SocialScreenState extends State<SocialScreen> {
                                   color: Colors.green,
                                 ),
                                 IconButton(
+                                  //:this fucntion deletes the 2 user friend connection (also removes it from the friedn requests list)
                                   onPressed: () {
                                     setState(() {
                                       Provider.of<SocialProvider>(context, listen: false).deleteFriendConnection(allRequests[index].ConnectionId);
@@ -168,6 +173,7 @@ class _SocialScreenState extends State<SocialScreen> {
                             shrinkWrap: true,
                             itemCount: allFriends.length,
                             itemBuilder: (context, index) {
+                              //gets the instance of the user that isn't the signed in one in the 2 users friend connection
                               UserC friend = Provider.of<AuthProvider>(context, listen: false)
                                   .getSpecificUser(Provider.of<SocialProvider>(context, listen: false).getSpecificFriend(allFriends[index]));
                               return Card(
@@ -182,34 +188,8 @@ class _SocialScreenState extends State<SocialScreen> {
                                         alignment: Alignment.topRight,
                                         child: IconButton(
                                             onPressed: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: ((ctx) => AlertDialog(
-                                                        title: Text('Delete Friend'),
-                                                        content: Text(
-                                                          'WARNING: This action will permanently delete this user from your friend list',
-                                                          textAlign: TextAlign.center,
-                                                        ),
-                                                        actions: [
-                                                          TextButton(
-                                                            child: Text('Cancel'),
-                                                            onPressed: () {
-                                                              Navigator.of(ctx).pop(true);
-                                                            },
-                                                          ),
-                                                          TextButton(
-                                                            child: Text(
-                                                              'Delete',
-                                                              style: TextStyle(color: Colors.red.shade800),
-                                                            ),
-                                                            onPressed: () async {
-                                                              await Provider.of<SocialProvider>(context, listen: false)
-                                                                  .deleteFriendConnection(allFriends[index].ConnectionId);
-                                                              Navigator.of(ctx).pop(true);
-                                                            },
-                                                          )
-                                                        ],
-                                                      )));
+                                              //defined down this file
+                                              deleteFriend(context, allFriends, index);
                                             },
                                             icon: Icon(
                                               Icons.delete,
@@ -254,6 +234,41 @@ class _SocialScreenState extends State<SocialScreen> {
         ));
   }
 
+  //input: context of page, a list of all established friend connections, index of gridview item (up this file)
+  //output: shows a dialog on screen (via context) asking the user for final aprooval
+  //        to delete the friend (user) apreaing in that gridview item (with the inputted index)
+  deleteFriend(BuildContext context, List<FriendConnection> allFriends, int index) async {
+    showDialog(
+        context: context,
+        builder: ((ctx) => AlertDialog(
+              title: Text('Delete Friend'),
+              content: Text(
+                'WARNING: This action will permanently delete this user from your friend list',
+                textAlign: TextAlign.center,
+              ),
+              actions: [
+                TextButton(
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(ctx).pop(true);
+                  },
+                ),
+                TextButton(
+                  child: Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.red.shade800),
+                  ),
+                  onPressed: () async {
+                    //provider method
+                    await Provider.of<SocialProvider>(context, listen: false).deleteFriendConnection(allFriends[index].ConnectionId);
+                    Navigator.of(ctx).pop(true);
+                  },
+                )
+              ],
+            )));
+  }
+
+//explain
   Future<dynamic> bottomSheetUsers(BuildContext context, List<FriendConnection> allFriends, List<FriendConnection> allRequests) {
     return showModalBottomSheet(
         context: context,
@@ -353,8 +368,8 @@ class _SocialScreenState extends State<SocialScreen> {
                                                 backgroundImage: NetworkImage(displayedList[index].userProfileUrl),
                                               ),
                                               trailing: !Provider.of<SocialProvider>(context, listen: true).allConnections.contains(
-                                                      Provider.of<SocialProvider>(context, listen: true).getConnectionById(
-                                                          displayedList[index].userId)) //doesn't work needs future fixing!!!!!!!!!!!!!!!!!!!!
+                                                      Provider.of<SocialProvider>(context, listen: true)
+                                                          .getConnectionById(displayedList[index].userId))
                                                   ? ElevatedButton(
                                                       child: Text('Friend Request'),
                                                       onPressed: () {

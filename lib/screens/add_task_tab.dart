@@ -12,8 +12,6 @@ class AddTaskTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        body: AddTaskScreen());
+    return Scaffold(backgroundColor: Theme.of(context).backgroundColor, body: AddTaskScreen());
   }
 }
