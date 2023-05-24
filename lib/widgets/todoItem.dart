@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../models/todo_item.dart';
 
@@ -36,7 +37,7 @@ class _TodoItemState extends State<TodoItem> {
         ),
         title: Text(
           widget.todo.text,
-          style: TextStyle(fontSize: 16, color: Colors.black, decoration: !widget.todo.isDone ? null : TextDecoration.lineThrough),
+          style: GoogleFonts.quicksand(fontSize: 16, color: Colors.black, decoration: !widget.todo.isDone ? null : TextDecoration.lineThrough),
         ),
         trailing: Container(
           padding: EdgeInsets.all(0),

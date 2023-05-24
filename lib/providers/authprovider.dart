@@ -86,6 +86,16 @@ class AuthProvider with ChangeNotifier {
     );
   }
 
+  //input: a picture's url
+  //output: sets the singed in user's userProfileUrl as the url inputted in both firebase and local memory
+  void setMyProfileUrl(String url) {
+    FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).update({
+      'userProfileUrl': url,
+    });
+    (_users.firstWhere((element) => element.userId == FirebaseAuth.instance.currentUser.uid)).userProfileUrl = url;
+    notifyListeners();
+  }
+
   //input: user id
   //output: returns the whole instance (including the data) of the user with that specific id
   UserC getSpecificUser(String id) {

@@ -21,6 +21,9 @@ class UserImagePicker extends StatefulWidget {
 class _UserImagePickerState extends State<UserImagePicker> {
   File _pickedImageFile;
 
+  //input: takes a source to take a picture
+  //output: this widget (ImagePicker) either opens the phones camera to take a picture (if source == camera)
+  //        or opens phone's gallery to choose a picture (if source == gallery)
   void _pickImage(String source) async {
     final pickedImage = await ImagePicker().pickImage(
         source: source == 'camera' ? ImageSource.camera : ImageSource.gallery, imageQuality: 65, maxWidth: 150); //could be gallery instead of camera
@@ -69,40 +72,46 @@ class _UserImagePickerState extends State<UserImagePicker> {
                 icon: Icon(Icons.edit),
                 color: Colors.white,
                 onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: ((ctx) => AlertDialog(
-                            title: Text('Pick Image Source'),
-                            content: Text(
-                              'Where do you want to take your image from?',
-                            ),
-                            actions: [
-                              TextButton(
-                                child: Text('Cancel'),
-                                onPressed: () {
-                                  Navigator.of(ctx).pop(true);
-                                },
-                              ),
-                              TextButton(
-                                child: Text('Camera'),
-                                onPressed: () async {
-                                  await _pickImage('camera');
-                                  Navigator.of(ctx).pop(true);
-                                },
-                              ),
-                              TextButton(
-                                child: Text('Gallery'),
-                                onPressed: () async {
-                                  await _pickImage('gallery');
-                                  Navigator.of(ctx).pop(true);
-                                },
-                              ),
-                            ],
-                          )));
+                  showSourceCameraDialog(context); //defined down this file
                 },
               ),
             )),
       ],
     );
+  }
+
+  //input: the context of the page
+  //output: shows a dialog on the page (via context), and lets the user choose between camera gallery and cancel all actions.
+  showSourceCameraDialog(BuildContext context) async {
+    showDialog(
+        context: context,
+        builder: ((ctx) => AlertDialog(
+              title: Text('Pick Image Source'),
+              content: Text(
+                'Where do you want to take your image from?',
+              ),
+              actions: [
+                TextButton(
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(ctx).pop(true);
+                  },
+                ),
+                TextButton(
+                  child: Text('Camera'),
+                  onPressed: () async {
+                    await _pickImage('camera'); //defined up this file
+                    Navigator.of(ctx).pop(true);
+                  },
+                ),
+                TextButton(
+                  child: Text('Gallery'),
+                  onPressed: () async {
+                    await _pickImage('gallery'); //defined up this file
+                    Navigator.of(ctx).pop(true);
+                  },
+                ),
+              ],
+            )));
   }
 }

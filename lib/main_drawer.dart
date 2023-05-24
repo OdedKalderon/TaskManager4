@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({Key key}) : super(key: key);
@@ -20,7 +21,7 @@ class MainDrawer extends StatelessWidget {
               color: Theme.of(context).accentColor,
               child: Text(
                 'Navigation',
-                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 30, color: Colors.white),
+                style: GoogleFonts.quicksand(fontWeight: FontWeight.w800, fontSize: 30, color: Colors.white),
               )),
           SizedBox(
             height: 20,
@@ -28,7 +29,7 @@ class MainDrawer extends StatelessWidget {
           ListTile(
             title: Text(
               'Logout',
-              style: TextStyle(
+              style: GoogleFonts.quicksand(
                 fontWeight: FontWeight.w500,
                 fontSize: 22,
                 color: Colors.grey[600],
@@ -36,6 +37,7 @@ class MainDrawer extends StatelessWidget {
             ),
             leading: Icon(Icons.exit_to_app, size: 26, color: Colors.grey[600]),
             onTap: () {
+              //shows a dialog on screen that lets the user choose between cancel and return to page and signing out of the up.
               showDialog(
                   context: context,
                   builder: ((ctx) => AlertDialog(
@@ -51,7 +53,7 @@ class MainDrawer extends StatelessWidget {
                           TextButton(
                             child: Text('Yes'),
                             onPressed: () {
-                              FirebaseAuth.instance.signOut();
+                              FirebaseAuth.instance.signOut(); //Firebase function.
                               Navigator.of(ctx).pop();
                             },
                           )

@@ -10,6 +10,7 @@ import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/providers/todoprovider.dart';
 import 'package:flutter_complete_guide/providers/usertaskprovider.dart';
 import 'package:flutter_complete_guide/widgets/todoItem.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -156,7 +157,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     return Scaffold(
       //drawer: MainDrawer(),
       appBar: AppBar(
-        title: Text('Add Task', style: TextStyle(fontWeight: FontWeight.w600)),
+        title: Text('Add Task', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
       ),
       body: _isLoading
           ? Center(
@@ -250,13 +251,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           Row(
                             children: [
                               Expanded(
-                                child: Text(_selectedDate == null ? 'No Date Chosen!' : 'Picked Date: ${DateFormat.yMMMd().format(_selectedDate)}'),
+                                child: Text(
+                                  _selectedDate == null ? 'No Date Chosen!' : 'Picked Date: ${DateFormat.yMMMd().format(_selectedDate)}',
+                                  style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
+                                ),
                               ),
                               TextButton(
                                   onPressed: _presentDatePicker, //defined up this file
                                   child: Text(
                                     'Choose Date',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
                                   ))
                             ],
                           ),
@@ -267,7 +271,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               ),
                               Text(
                                 'Things To Do',
-                                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                                style: GoogleFonts.quicksand(fontSize: 24, fontWeight: FontWeight.w500),
                               ),
                               SizedBox(
                                 height: 15,
@@ -297,7 +301,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                       child: ElevatedButton(
                                         child: Text(
                                           '+',
-                                          style: TextStyle(fontSize: 40),
+                                          style: GoogleFonts.quicksand(fontSize: 40),
                                         ),
                                         onPressed: () {
                                           _todoController.text.isEmpty
@@ -338,7 +342,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             children: [
                               Text(
                                 !_taskIsUrgent ? 'Status: Not Urgent' : 'Status: Urgent',
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                style: GoogleFonts.quicksand(fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                               Switch(
                                   value: _taskIsUrgent,
@@ -355,9 +359,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     ),
                     ElevatedButton(
                         onPressed: _taskFormSubmit, //defined up this file
-                        child: const Text(
+                        child: Text(
                           'Submit',
-                          style: TextStyle(fontSize: 16),
+                          style: GoogleFonts.quicksand(fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         style: ElevatedButton.styleFrom(
                           fixedSize: Size(90, 30),
@@ -410,7 +414,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     children: [
                       Text(
                         'Search for a user',
-                        style: TextStyle(color: Colors.grey.shade600, fontSize: 22, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.quicksand(color: Colors.grey.shade600, fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 20,
@@ -443,7 +447,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                     Center(
                                       child: Text(
                                         'No result found',
-                                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                                        style: GoogleFonts.quicksand(fontSize: 22, fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ],
@@ -459,7 +463,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                               contentPadding: EdgeInsets.all(8),
                                               title: Text(
                                                 displayedList[index].username,
-                                                style: TextStyle(fontWeight: FontWeight.w500),
+                                                style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
                                               ),
                                               leading: CircleAvatar(
                                                 backgroundImage: NetworkImage(displayedList[index].userProfileUrl),

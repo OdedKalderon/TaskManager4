@@ -7,6 +7,7 @@ import 'package:flutter_complete_guide/providers/usertaskprovider.dart';
 import 'package:flutter_complete_guide/screens/add_task_screen.dart';
 import 'package:flutter_complete_guide/screens/display_task_screen.dart';
 import 'package:flutter_iconpicker/IconPicker/Packs/Cupertino.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../models/task.dart';
@@ -37,7 +38,7 @@ class _TasksScreenState extends State<TasksScreen> {
     List<Task> AllTasks = Mytasks + Sharedtasks;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('All Tasks', style: TextStyle(fontWeight: FontWeight.w600)),
+        title: Text('All Tasks', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -62,7 +63,7 @@ class _TasksScreenState extends State<TasksScreen> {
                         alignment: Alignment.topLeft,
                         child: Text(
                           'Uncompleted Tasks',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.quicksand(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -81,6 +82,7 @@ class _TasksScreenState extends State<TasksScreen> {
                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
                                 child: ListTile(
                                   onTap: () {
+                                    //pushes a different screen whil forwarding some data, such as task[index] instance, todos, and shared users with it.
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -96,7 +98,10 @@ class _TasksScreenState extends State<TasksScreen> {
                                   title: AllTasks[index].IsUrgent
                                       ? Row(
                                           children: [
-                                            Text(AllTasks[index].Name),
+                                            Text(
+                                              AllTasks[index].Name,
+                                              style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
+                                            ),
                                             SizedBox(
                                               width: 10,
                                             ),
@@ -109,7 +114,10 @@ class _TasksScreenState extends State<TasksScreen> {
                                         )
                                       : Row(
                                           children: [
-                                            Text(AllTasks[index].Name),
+                                            Text(
+                                              AllTasks[index].Name,
+                                              style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
+                                            ),
                                             SizedBox(
                                               width: 10,
                                             ),
@@ -123,11 +131,15 @@ class _TasksScreenState extends State<TasksScreen> {
                                   subtitle: AllTasks[index].Description.length <= 35
                                       ? Text(
                                           AllTasks[index].Description + '\nDate Due To: ' + AllTasks[index].DateDue,
+                                          style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
                                         )
-                                      : Text(AllTasks[index].Description.toString().substring(0, 36) +
-                                          '... \n' +
-                                          'Date Due To: ' +
-                                          AllTasks[index].DateDue),
+                                      : Text(
+                                          AllTasks[index].Description.toString().substring(0, 36) +
+                                              '... \n' +
+                                              'Date Due To: ' +
+                                              AllTasks[index].DateDue,
+                                          style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
+                                        ),
                                   tileColor: Colors.white,
                                   trailing: Icon(IconData(0xf5d3, fontFamily: iconFont, fontPackage: iconFontPackage)),
                                 ),
@@ -145,7 +157,8 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
               ))
           : Center(
-              child: Text('You don\'t have any tasks to be done\nstart adding some!', style: TextStyle(fontSize: 20), textAlign: TextAlign.center)),
+              child: Text('You don\'t have any tasks to be done\nstart adding some!',
+                  style: GoogleFonts.quicksand(fontSize: 20), textAlign: TextAlign.center)),
     );
   }
 }

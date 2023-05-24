@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_complete_guide/models/task.dart';
 import 'package:flutter_iconpicker/IconPicker/Packs/Cupertino.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user_task.dart';
@@ -38,7 +39,7 @@ class UrgentsScreen extends StatelessWidget {
     List<Task> allurgs = Urgs + shared;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Urgents', style: TextStyle(fontWeight: FontWeight.w600)),
+        title: Text('Urgents', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -57,9 +58,9 @@ class UrgentsScreen extends StatelessWidget {
                   SizedBox(
                     height: 220,
                   ),
-                  const Text(
+                  Text(
                     'You don\'t have any urgent tasks yet',
-                    style: TextStyle(
+                    style: GoogleFonts.quicksand(
                       fontSize: 20,
                     ),
                   ),
@@ -72,9 +73,9 @@ class UrgentsScreen extends StatelessWidget {
                     width: 115,
                   ),
                   SizedBox(height: 10),
-                  const Text(
+                  Text(
                     'Start adding some by clicking the urgent switch in the task creating & editing page',
-                    style: TextStyle(
+                    style: GoogleFonts.quicksand(
                       fontSize: 16,
                     ),
                     textAlign: TextAlign.center,
@@ -92,7 +93,7 @@ class UrgentsScreen extends StatelessWidget {
                       alignment: Alignment.topLeft,
                       child: Text(
                         'Uncompleted Urgent Tasks',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.quicksand(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -107,6 +108,7 @@ class UrgentsScreen extends StatelessWidget {
                         children: [
                           ListTile(
                             onTap: () {
+                              //pushes a different screen whil forwarding some data, such as task[index] instance, todos, and shared users with it.
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -118,36 +120,26 @@ class UrgentsScreen extends StatelessWidget {
                             },
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                             contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                            title: allurgs[index].IsUrgent
-                                ? Row(
-                                    children: [
-                                      Text(allurgs[index].Name),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Icon(
-                                        IconData(0xf65a, fontFamily: iconFont, fontPackage: iconFontPackage),
-                                        color: Colors.red,
-                                        size: 20,
-                                      )
-                                    ],
-                                  )
-                                : Row(
-                                    children: [
-                                      Text(allurgs[index].Name),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Icon(
-                                        IconData(0xf65a, fontFamily: iconFont, fontPackage: iconFontPackage),
-                                        color: Colors.grey,
-                                        size: 20,
-                                      ),
-                                    ],
-                                  ),
+                            title: Row(
+                              children: [
+                                Text(
+                                  allurgs[index].Name,
+                                  style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(
+                                  IconData(0xf65a, fontFamily: iconFont, fontPackage: iconFontPackage),
+                                  color: Colors.red,
+                                  size: 20,
+                                )
+                              ],
+                            ),
                             subtitle: allurgs[index].Description.length <= 35
                                 ? Text(
                                     allurgs[index].Description + '\nDate Due To: ' + allurgs[index].DateDue,
+                                    style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
                                   )
                                 : Text(allurgs[index].Description.toString().substring(0, 36) + '... \n' + 'Date Due To: ' + allurgs[index].DateDue),
                             tileColor: Colors.white,

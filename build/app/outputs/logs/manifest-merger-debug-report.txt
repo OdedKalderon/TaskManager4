@@ -57,6 +57,7 @@ MERGED from [:cloud_firestore] C:\Users\odedk\OneDrive\Documents\GitHub\TaskMana
 MERGED from [:firebase_core] C:\Users\odedk\OneDrive\Documents\GitHub\TaskManager4\build\firebase_core\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-17:12
 MERGED from [:image_picker_android] C:\Users\odedk\OneDrive\Documents\GitHub\TaskManager4\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-21:12
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\odedk\OneDrive\Documents\GitHub\TaskManager4\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:path_provider_android] C:\Users\odedk\OneDrive\Documents\GitHub\TaskManager4\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\odedk\.gradle\caches\transforms-3\6dc4083b7c7580f433cecdbc41323bd2\transformed\multidex-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.firebase:firebase-auth:21.3.0] C:\Users\odedk\.gradle\caches\transforms-3\99c4415c85c41d201ce35622f58fe74c\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:17:1-75:12
 MERGED from [com.google.android.recaptcha:recaptcha:18.0.1] C:\Users\odedk\.gradle\caches\transforms-3\59517f06981e5b5cb615dca3722f90c1\transformed\jetified-recaptcha-18.0.1\AndroidManifest.xml:2:1-9:12
@@ -131,6 +132,8 @@ MERGED from [:image_picker_android] C:\Users\odedk\OneDrive\Documents\GitHub\Tas
 MERGED from [:image_picker_android] C:\Users\odedk\OneDrive\Documents\GitHub\TaskManager4\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\odedk\OneDrive\Documents\GitHub\TaskManager4\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\odedk\OneDrive\Documents\GitHub\TaskManager4\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:path_provider_android] C:\Users\odedk\OneDrive\Documents\GitHub\TaskManager4\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:path_provider_android] C:\Users\odedk\OneDrive\Documents\GitHub\TaskManager4\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\odedk\.gradle\caches\transforms-3\6dc4083b7c7580f433cecdbc41323bd2\transformed\multidex-2.0.0\AndroidManifest.xml:20:5-43
 MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\odedk\.gradle\caches\transforms-3\6dc4083b7c7580f433cecdbc41323bd2\transformed\multidex-2.0.0\AndroidManifest.xml:20:5-43
 MERGED from [com.google.firebase:firebase-auth:21.3.0] C:\Users\odedk\.gradle\caches\transforms-3\99c4415c85c41d201ce35622f58fe74c\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:21:5-23:64

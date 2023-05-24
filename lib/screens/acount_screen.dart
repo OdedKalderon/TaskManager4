@@ -13,6 +13,7 @@ import 'package:flutter_complete_guide/models/user_task.dart';
 import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/providers/usertaskprovider.dart';
 import 'package:flutter_complete_guide/widgets/user_image_picker.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../main_drawer.dart';
@@ -51,11 +52,11 @@ class _AcountScreenState extends State<AcountScreen> {
       return myFinishedTasks;
     }
 
-    List<task.Task> _myFinished = getMyFinishedTasks();
+    List<task.Task> _myFinished = getMyFinishedTasks(); //defined up this file
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Acount', style: TextStyle(fontWeight: FontWeight.w600)),
+        title: Text('Acount', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
         actions: [
           IconButton(
             icon: Icon(IconData(0xf0563, fontFamily: 'MaterialIcons')),
@@ -68,7 +69,8 @@ class _AcountScreenState extends State<AcountScreen> {
                   ),
                 );
               } else {
-                //adds to storage the picture as jpg file, then takes it's url and sets it in the user's signed in field userProfileUrl.
+                //adds to storage the picture picked in the imagepicker above, as jpg file,
+                //then takes it's url and sets it in the user's signed in field userProfileUrl.
                 await FirebaseStorage.instance
                     .ref()
                     .child('user_images')
@@ -76,9 +78,7 @@ class _AcountScreenState extends State<AcountScreen> {
                     .putFile(_selectedImage);
                 final imageUrl =
                     await FirebaseStorage.instance.ref().child('user_images').child('${FirebaseAuth.instance.currentUser.uid}.jpg').getDownloadURL();
-                FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).update({
-                  'userProfileUrl': imageUrl,
-                });
+                Provider.of<AuthProvider>(context, listen: false).setMyProfileUrl(imageUrl);
               }
             },
           )
@@ -90,6 +90,7 @@ class _AcountScreenState extends State<AcountScreen> {
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: Column(
           children: [
+            //this widget is separated in the widgets folder
             Center(child: UserImagePicker(
               onPickImage: ((pickedImage) {
                 _selectedImage = pickedImage;
@@ -102,17 +103,17 @@ class _AcountScreenState extends State<AcountScreen> {
               children: [
                 Text(
                   '@' + _userName,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  style: GoogleFonts.quicksand(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 SizedBox(height: 4),
-                Text(_email, style: TextStyle(fontSize: 16)),
+                Text(_email, style: GoogleFonts.quicksand(fontSize: 16)),
                 SizedBox(
                   height: 40,
                 ),
                 Container(
                   child: Text(
                     'History Finished Task',
-                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.quicksand(fontSize: 16, color: Colors.grey.shade600, fontWeight: FontWeight.bold),
                   ),
                   padding: EdgeInsets.only(bottom: 5),
                 ),
@@ -133,20 +134,21 @@ class _AcountScreenState extends State<AcountScreen> {
                               child: Column(children: [
                                 Text(
                                   _myFinished[index].Name,
-                                  style: TextStyle(fontSize: 16, color: Colors.grey.shade800, fontWeight: FontWeight.bold),
+                                  style: GoogleFonts.quicksand(fontSize: 16, color: Colors.grey.shade800, fontWeight: FontWeight.bold),
                                 ),
                                 _myFinished[index].Description.length <= 35
                                     ? Text(
                                         _myFinished[index].Description,
-                                        style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                                        style: GoogleFonts.quicksand(fontSize: 12, color: Colors.grey.shade700),
                                       )
                                     : Text(
-                                        _myFinished[index].Description.toString().substring(0, 36) + '... ',
-                                        style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                                        _myFinished[index].Description.toString().substring(0, 36) +
+                                            '... ', //makes sure teh description fits within the list tile
+                                        style: GoogleFonts.quicksand(fontSize: 12, color: Colors.grey.shade700),
                                       ),
                                 Text(
                                   _myFinished[index].DateDue,
-                                  style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                                  style: GoogleFonts.quicksand(fontSize: 12, color: Colors.grey.shade700),
                                 )
                               ]),
                             );
@@ -159,7 +161,7 @@ class _AcountScreenState extends State<AcountScreen> {
                             child: Text(
                               'You don\'t have any\nfinished tasks yet',
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 22, color: Colors.grey.shade700),
+                              style: GoogleFonts.quicksand(fontSize: 22, color: Colors.grey.shade700),
                             ),
                           ),
                         ),

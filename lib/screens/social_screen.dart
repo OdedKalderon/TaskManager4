@@ -8,6 +8,7 @@ import 'package:flutter_complete_guide/main.dart';
 import 'package:flutter_complete_guide/models/friend_connection.dart';
 import 'package:flutter_complete_guide/providers/authprovider.dart';
 import 'package:flutter_complete_guide/providers/socialprovider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../main_drawer.dart';
@@ -41,7 +42,7 @@ class _SocialScreenState extends State<SocialScreen> {
     List<FriendConnection> allFriends = Provider.of<SocialProvider>(context, listen: true).getFriends();
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Social', style: TextStyle(fontWeight: FontWeight.w600)),
+          title: Text('Social', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
           actions: [
             IconButton(
               icon: Icon(
@@ -64,7 +65,7 @@ class _SocialScreenState extends State<SocialScreen> {
                   padding: EdgeInsets.fromLTRB(15, 20, 15, 10),
                   child: Text(
                     'Friend Request',
-                    style: TextStyle(color: Colors.grey.shade600, fontWeight: FontWeight.bold, fontSize: 15),
+                    style: GoogleFonts.quicksand(color: Colors.grey.shade600, fontWeight: FontWeight.bold, fontSize: 15),
                   )),
             ),
             Container(
@@ -81,7 +82,7 @@ class _SocialScreenState extends State<SocialScreen> {
                               contentPadding: EdgeInsets.all(8),
                               title: Text(
                                 sender.username,
-                                style: TextStyle(fontWeight: FontWeight.w500),
+                                style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
                               ),
                               leading: CircleAvatar(backgroundImage: NetworkImage(sender.userProfileUrl)),
                               trailing: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -122,7 +123,7 @@ class _SocialScreenState extends State<SocialScreen> {
                               child: Text(
                                 'You don\'t have any new \n friend requests :)',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20, color: Colors.grey.shade700),
+                                style: GoogleFonts.quicksand(fontSize: 20, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
                               ),
                             ),
                           ],
@@ -139,7 +140,11 @@ class _SocialScreenState extends State<SocialScreen> {
                   padding: EdgeInsets.fromLTRB(15, 20, 15, 10),
                   child: Text(
                     'Friend List',
-                    style: TextStyle(color: Colors.grey.shade600, fontWeight: FontWeight.bold, fontSize: 15),
+                    style: GoogleFonts.quicksand(
+                      color: Colors.grey.shade600,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
                   )),
             ),
             Container(
@@ -153,7 +158,7 @@ class _SocialScreenState extends State<SocialScreen> {
                           Center(
                             child: Text(
                               'You don\'t have any friends yet',
-                              style: TextStyle(fontSize: 20, color: Colors.grey.shade700),
+                              style: GoogleFonts.quicksand(fontSize: 20, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
                             ),
                           ),
                         ],
@@ -181,7 +186,7 @@ class _SocialScreenState extends State<SocialScreen> {
                                   elevation: 4,
                                   shadowColor: Colors.grey.shade100,
                                   child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
                                     child: Column(children: [
                                       Container(
                                         height: 30,
@@ -208,7 +213,7 @@ class _SocialScreenState extends State<SocialScreen> {
                                         margin: EdgeInsets.only(top: 2),
                                         child: Text(
                                           friend.username,
-                                          style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.bold, fontSize: 18),
+                                          style: GoogleFonts.quicksand(color: Colors.grey.shade700, fontWeight: FontWeight.bold, fontSize: 18),
                                         ),
                                       ),
                                       SizedBox(
@@ -218,11 +223,11 @@ class _SocialScreenState extends State<SocialScreen> {
                                         margin: EdgeInsets.only(top: 2),
                                         child: Text(
                                           friend.email,
-                                          style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.bold, fontSize: 12),
+                                          style: GoogleFonts.quicksand(color: Colors.grey.shade700, fontWeight: FontWeight.bold, fontSize: 12),
                                         ),
                                       ),
                                       SizedBox(
-                                        height: 25,
+                                        height: 22,
                                       ),
                                     ]),
                                   ));
@@ -256,7 +261,7 @@ class _SocialScreenState extends State<SocialScreen> {
                 TextButton(
                   child: Text(
                     'Delete',
-                    style: TextStyle(color: Colors.red.shade800),
+                    style: GoogleFonts.quicksand(color: Colors.red.shade800),
                   ),
                   onPressed: () async {
                     //provider method
@@ -268,12 +273,13 @@ class _SocialScreenState extends State<SocialScreen> {
             )));
   }
 
-//explain
+  //shows a bottom sheet with a searchbar, to search for users that you friend request.
   Future<dynamic> bottomSheetUsers(BuildContext context, List<FriendConnection> allFriends, List<FriendConnection> allRequests) {
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         builder: (BuildContext context) {
+          //sets a searchebale list of users. removes yourself, all established friend connections, and all friend requests.
           List<UserC> searchableUsers = Provider.of<AuthProvider>(context, listen: false).users;
           searchableUsers.removeWhere((item) => item.userId == FirebaseAuth.instance.currentUser.uid);
           for (FriendConnection connection in allFriends) {
@@ -293,6 +299,8 @@ class _SocialScreenState extends State<SocialScreen> {
           ;
           List<UserC> displayedList = List.from(searchableUsers);
 
+          //input: String value
+          //output: takes the string valuse inputted from the textfield searchbar and constantly updates the searchable useres according to it.
           void updateList(String value) {
             setState(() {
               displayedList = searchableUsers.where((element) => element.username.toLowerCase().contains(value.toLowerCase())).toList();
@@ -313,7 +321,7 @@ class _SocialScreenState extends State<SocialScreen> {
                     children: [
                       Text(
                         'Search for a user',
-                        style: TextStyle(color: Colors.grey.shade600, fontSize: 22, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.quicksand(color: Colors.grey.shade600, fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 20,
@@ -321,7 +329,7 @@ class _SocialScreenState extends State<SocialScreen> {
                       TextField(
                         onChanged: (value) {
                           state(() {
-                            updateList(value);
+                            updateList(value); //defined up this file
                           });
                         },
                         decoration: InputDecoration(
@@ -346,7 +354,7 @@ class _SocialScreenState extends State<SocialScreen> {
                                     Center(
                                       child: Text(
                                         'No result found',
-                                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                                        style: GoogleFonts.quicksand(fontSize: 22, fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ],
@@ -362,25 +370,28 @@ class _SocialScreenState extends State<SocialScreen> {
                                               contentPadding: EdgeInsets.all(8),
                                               title: Text(
                                                 displayedList[index].username,
-                                                style: TextStyle(fontWeight: FontWeight.w500),
+                                                style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
                                               ),
                                               leading: CircleAvatar(
                                                 backgroundImage: NetworkImage(displayedList[index].userProfileUrl),
                                               ),
+                                              //check if the user[index] has already a pending request connection,
+                                              //if yes then button switches to pending with a function to delete the connection
+                                              //if no then button stays as send request and it's function sets a connection (Status: false)
                                               trailing: !Provider.of<SocialProvider>(context, listen: true).allConnections.contains(
                                                       Provider.of<SocialProvider>(context, listen: true)
                                                           .getConnectionById(displayedList[index].userId))
                                                   ? ElevatedButton(
                                                       child: Text('Friend Request'),
                                                       onPressed: () {
-                                                        _setConnection(displayedList[index]);
+                                                        _setConnection(displayedList[index]); //defined up this file
                                                         FocusScope.of(context).unfocus();
                                                       },
                                                     )
                                                   : OutlinedButton(
                                                       child: Text('Pending Request'),
                                                       onPressed: () {
-                                                        _deleteConnection(displayedList[index]);
+                                                        _deleteConnection(displayedList[index]); //defined up this file
                                                         FocusScope.of(context).unfocus();
                                                       },
                                                     )),

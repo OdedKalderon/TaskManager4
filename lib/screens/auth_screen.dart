@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_complete_guide/providers/authprovider.dart';
@@ -117,11 +118,17 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                         SizedBox(height: 12),
                         ElevatedButton(
-                          child: Text(_isLogin ? 'Login' : 'Signup'),
+                          child: Text(
+                            _isLogin ? 'Login' : 'Signup',
+                            style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
+                          ),
                           onPressed: _trySubmit,
                         ),
                         TextButton(
-                          child: Text(_isLogin ? 'Create new account' : 'I already have an account'),
+                          child: Text(
+                            _isLogin ? 'Create new account' : 'I already have an account',
+                            style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
+                          ),
                           onPressed: () {
                             setState(() {
                               _isLogin = !_isLogin;

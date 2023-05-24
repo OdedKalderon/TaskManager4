@@ -9,6 +9,7 @@ import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/providers/todoprovider.dart';
 import 'package:flutter_complete_guide/providers/usertaskprovider.dart';
 import 'package:flutter_iconpicker/IconPicker/icons.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/src/intl/date_format.dart';
 
@@ -66,7 +67,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Task Details', style: TextStyle(fontWeight: FontWeight.w400)),
+        title: Text('Task Details', style: GoogleFonts.quicksand(fontWeight: FontWeight.w400)),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -78,7 +79,14 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                 children: [
                   IconButton(
                       onPressed: () {
-                        deleteDialog(context);
+                        widget.task.UserId == FirebaseAuth.instance.currentUser.uid
+                            ? deleteDialog(context)
+                            : ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Only the task manager/creator can delete this task'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
                       },
                       icon: Icon(
                         Icons.delete,
@@ -87,7 +95,14 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                       )),
                   IconButton(
                       onPressed: () {
-                        finishDialog(context);
+                        widget.task.UserId == FirebaseAuth.instance.currentUser.uid
+                            ? finishDialog(context)
+                            : ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Only the task manager/creator can completely finish this task'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
                       },
                       icon: Icon(
                         Icons.check,
@@ -100,7 +115,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
             ),
             Text(
               widget.task.Name,
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.grey.shade900),
+              style: GoogleFonts.quicksand(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.grey.shade900),
               textAlign: TextAlign.center,
             ),
             SizedBox(
@@ -108,7 +123,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
             ),
             Text(
               widget.task.Description,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: Colors.grey.shade700),
+              style: GoogleFonts.quicksand(fontSize: 18, fontWeight: FontWeight.w400, color: Colors.grey.shade700),
               textAlign: TextAlign.center,
             ),
             SizedBox(
@@ -120,7 +135,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                 children: [
                   Text(
                     widget.task.DateDue,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.grey),
+                    style: GoogleFonts.quicksand(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.grey),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
@@ -155,8 +170,9 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                         return Container(
                           height: 40,
                           width: index != 0
-                              ? ((_included[index].username).length * 16) + 35.1
-                              : ((_included[index].username).length * 16) + 60.1, // if time left check this
+                              ? ((_included[index].username).length * 16) + 40.1
+                              : ((_included[index].username).length * 16) +
+                                  65.1, // calculation for max length possible (fontsize * usernamelength while username is max length)
                           child: Card(
                             child: ListTile(
                               leading: CircleAvatar(
@@ -164,7 +180,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                               ),
                               title: Text(
                                 _included[index].username,
-                                style: TextStyle(color: Colors.grey.shade800, fontSize: 16),
+                                style: GoogleFonts.quicksand(color: Colors.grey.shade800, fontSize: 16),
                               ),
                               trailing: index == 0
                                   ? Icon(
@@ -182,7 +198,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                   : Center(
                       child: Text(
                         'This task isn\'t shared with anyone',
-                        style: TextStyle(color: Colors.grey.shade700, fontSize: 18),
+                        style: GoogleFonts.quicksand(color: Colors.grey.shade700, fontSize: 18),
                       ),
                     ),
             ),
@@ -212,7 +228,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                   child: ElevatedButton(
                     child: Text(
                       '+',
-                      style: TextStyle(fontSize: 40),
+                      style: GoogleFonts.quicksand(fontSize: 40),
                     ),
                     onPressed: () {
                       _todoController.text.isEmpty
@@ -258,9 +274,9 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                     ),
                   );
                 },
-                child: const Text(
+                child: Text(
                   'Save Changes',
-                  style: TextStyle(fontSize: 16),
+                  style: GoogleFonts.quicksand(fontSize: 16),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).accentColor,
@@ -290,7 +306,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                 TextButton(
                   child: Text(
                     'Finish',
-                    style: TextStyle(color: Colors.green.shade800),
+                    style: GoogleFonts.quicksand(color: Colors.green.shade800, fontWeight: FontWeight.w500),
                   ),
                   onPressed: () async {
                     Provider.of<TaskProvider1>(context, listen: false).setAsDone(widget.task.TaskId);
@@ -324,7 +340,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                 TextButton(
                   child: Text(
                     'Delete',
-                    style: TextStyle(color: Colors.red.shade800),
+                    style: GoogleFonts.quicksand(color: Colors.red.shade800, fontWeight: FontWeight.w500),
                   ),
                   onPressed: () async {
                     await Provider.of<TaskProvider1>(context, listen: false).deleteTask(widget.task.TaskId);

@@ -29,6 +29,7 @@ dependencies:
   flutter_iconpicker: ^3.0.2
   firebase_storage: ^11.1.2
   image_picker: ^0.8.7+4
+  google_fonts: ^4.0.4
 
 dev_dependencies:
   flutter_test:
