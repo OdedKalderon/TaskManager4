@@ -125,32 +125,40 @@ class _AcountScreenState extends State<AcountScreen> {
                   child: _myFinished.length != 0
                       ? ListView.builder(
                           itemBuilder: (context, index) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.white,
-                                  boxShadow: [BoxShadow(color: Colors.grey.shade700, offset: Offset(0, 3), blurRadius: 5, spreadRadius: 1)]),
-                              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                              child: Column(children: [
-                                Text(
-                                  _myFinished[index].Name,
-                                  style: GoogleFonts.quicksand(fontSize: 16, color: Colors.grey.shade800, fontWeight: FontWeight.bold),
+                            return Column(
+                              children: [
+                                Container(
+                                  width: 280,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.white,
+                                      boxShadow: [BoxShadow(color: Colors.grey.shade700, offset: Offset(0, 3), blurRadius: 5, spreadRadius: 1)]),
+                                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                                  child: Column(children: [
+                                    Text(
+                                      _myFinished[index].Name,
+                                      style: GoogleFonts.quicksand(fontSize: 16, color: Colors.grey.shade800, fontWeight: FontWeight.bold),
+                                    ),
+                                    _myFinished[index].Description.length <= 35
+                                        ? Text(
+                                            _myFinished[index].Description,
+                                            style: GoogleFonts.quicksand(fontSize: 12, color: Colors.grey.shade700),
+                                          )
+                                        : Text(
+                                            _myFinished[index].Description.toString().substring(0, 36) +
+                                                '... ', //makes sure teh description fits within the list tile
+                                            style: GoogleFonts.quicksand(fontSize: 12, color: Colors.grey.shade700),
+                                          ),
+                                    Text(
+                                      _myFinished[index].DateDue,
+                                      style: GoogleFonts.quicksand(fontSize: 12, color: Colors.grey.shade700),
+                                    )
+                                  ]),
                                 ),
-                                _myFinished[index].Description.length <= 35
-                                    ? Text(
-                                        _myFinished[index].Description,
-                                        style: GoogleFonts.quicksand(fontSize: 12, color: Colors.grey.shade700),
-                                      )
-                                    : Text(
-                                        _myFinished[index].Description.toString().substring(0, 36) +
-                                            '... ', //makes sure teh description fits within the list tile
-                                        style: GoogleFonts.quicksand(fontSize: 12, color: Colors.grey.shade700),
-                                      ),
-                                Text(
-                                  _myFinished[index].DateDue,
-                                  style: GoogleFonts.quicksand(fontSize: 12, color: Colors.grey.shade700),
+                                SizedBox(
+                                  height: 6,
                                 )
-                              ]),
+                              ],
                             );
                           },
                           itemCount: _myFinished.length,

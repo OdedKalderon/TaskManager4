@@ -34,7 +34,7 @@ class UrgentsScreen extends StatelessWidget {
       return sharedtasks;
     }
 
-    List<Task> Urgs = Provider.of<TaskProvider1>(context, listen: false).urgs;
+    List<Task> Urgs = Provider.of<TaskProvider1>(context, listen: true).urgs;
     List<Task> shared = getShared();
     List<Task> allurgs = Urgs + shared;
     return Scaffold(
