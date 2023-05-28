@@ -157,7 +157,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     return Scaffold(
       //drawer: MainDrawer(),
       appBar: AppBar(
-        title: Text('Add Task', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
+        title: Row(children: [
+          Container(
+            height: 35,
+            width: 35,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), image: DecorationImage(image: AssetImage('lib/images/logo.jpg'))),
+          ),
+          SizedBox(width: 10),
+          Text('Add Task', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
+        ]),
       ),
       body: _isLoading
           ? Center(

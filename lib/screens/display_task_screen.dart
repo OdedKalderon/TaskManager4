@@ -67,7 +67,15 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Task Details', style: GoogleFonts.quicksand(fontWeight: FontWeight.w400)),
+        title: Row(children: [
+          Container(
+            height: 35,
+            width: 35,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), image: DecorationImage(image: AssetImage('lib/images/logo.jpg'))),
+          ),
+          SizedBox(width: 10),
+          Text('Task Details', style: GoogleFonts.quicksand(fontWeight: FontWeight.w400)),
+        ]),
       ),
       body: SingleChildScrollView(
         child: Center(

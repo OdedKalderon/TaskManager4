@@ -42,7 +42,15 @@ class _SocialScreenState extends State<SocialScreen> {
     List<FriendConnection> allFriends = Provider.of<SocialProvider>(context, listen: true).getFriends();
     return Scaffold(
         appBar: AppBar(
-          title: Text('Social', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
+          title: Row(children: [
+            Container(
+              height: 35,
+              width: 35,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), image: DecorationImage(image: AssetImage('lib/images/logo.jpg'))),
+            ),
+            SizedBox(width: 10),
+            Text('Social', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
+          ]),
           actions: [
             IconButton(
               icon: Icon(

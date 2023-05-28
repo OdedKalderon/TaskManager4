@@ -66,8 +66,6 @@ class AuthProvider with ChangeNotifier {
           backgroundColor: Theme.of(ctx).errorColor,
         ),
       );
-    } catch (err) {
-      print(err);
     }
   }
 

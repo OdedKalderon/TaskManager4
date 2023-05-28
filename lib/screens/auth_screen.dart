@@ -48,10 +48,17 @@ class _AuthScreenState extends State<AuthScreen> {
             SizedBox(
               height: 150,
             ),
-            Icon(
-              Icons.task,
-              size: 150,
-              color: Colors.grey.shade400,
+            Text(
+              'TaskTogether',
+              style: GoogleFonts.quicksand(fontSize: 30, fontWeight: FontWeight.w600, color: Colors.white),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              height: 170,
+              width: 170,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), image: DecorationImage(image: AssetImage('lib/images/logo.jpg'))),
             ),
             Card(
               margin: EdgeInsets.all(20),
@@ -109,7 +116,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     _obscure = !_obscure;
                                   });
                                 },
-                                child: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
+                                child: Icon(!_obscure ? Icons.visibility : Icons.visibility_off),
                               )),
                           obscureText: _obscure,
                           onSaved: (value) {

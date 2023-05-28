@@ -56,7 +56,15 @@ class _AcountScreenState extends State<AcountScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Acount', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
+        title: Row(children: [
+          Container(
+            height: 35,
+            width: 35,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), image: DecorationImage(image: AssetImage('lib/images/logo.jpg'))),
+          ),
+          SizedBox(width: 10),
+          Text('Acount', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
+        ]),
         actions: [
           IconButton(
             icon: Icon(IconData(0xf0563, fontFamily: 'MaterialIcons')),
@@ -79,6 +87,12 @@ class _AcountScreenState extends State<AcountScreen> {
                 final imageUrl =
                     await FirebaseStorage.instance.ref().child('user_images').child('${FirebaseAuth.instance.currentUser.uid}.jpg').getDownloadURL();
                 Provider.of<AuthProvider>(context, listen: false).setMyProfileUrl(imageUrl);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Changes were saved'),
+                    duration: Duration(seconds: 3),
+                  ),
+                );
               }
             },
           )
