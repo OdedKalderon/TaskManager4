@@ -23,12 +23,14 @@ class _TasksScreenState extends State<TasksScreen> {
   @override
   Widget build(BuildContext context) {
     //input: none
-    //output: returns a list of all the tasks that were shared with the user signed in
+    //output: returns a list of all the tasks that were shared with the user signed in, and are not done
     List<Task> getShared() {
       List<Task> sharedtasks = [];
       List<userTask> shared = Provider.of<UserTaskProvider>(context, listen: true).getMyUserTasks();
       for (userTask usertask in shared) {
-        sharedtasks.add(Provider.of<TaskProvider1>(context, listen: false).getSpecificTask(usertask.taskId));
+        if (Provider.of<TaskProvider1>(context, listen: false).getSpecificTask(usertask.taskId).isDone == false) {
+          sharedtasks.add(Provider.of<TaskProvider1>(context, listen: false).getSpecificTask(usertask.taskId));
+        }
       }
       return sharedtasks;
     }

@@ -22,12 +22,13 @@ class UrgentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //input: none
-    //output: returns a list of all the tasks that were both shared with the user signed in and their status is urgent
+    //output: returns a list of all the tasks that were both shared with the user signed in and their status is urgent and are not done
     List<Task> getShared() {
       List<Task> sharedtasks = [];
       List<userTask> shared = Provider.of<UserTaskProvider>(context, listen: false).getMyUserTasks();
       for (userTask usertask in shared) {
-        if (Provider.of<TaskProvider1>(context, listen: false).getSpecificTask(usertask.taskId).IsUrgent == true) {
+        if (Provider.of<TaskProvider1>(context, listen: false).getSpecificTask(usertask.taskId).IsUrgent == true &&
+            Provider.of<TaskProvider1>(context, listen: false).getSpecificTask(usertask.taskId).isDone == false) {
           sharedtasks.add(Provider.of<TaskProvider1>(context, listen: false).getSpecificTask(usertask.taskId));
         }
       }
@@ -75,10 +76,10 @@ class UrgentsScreen extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  Image.network(
-                    'https://static-00.iconduck.com/assets.00/relieved-face-emoji-512x512-f4bxb1mm.png',
-                    height: 115,
-                    width: 115,
+                  Container(
+                    height: 120,
+                    width: 120,
+                    decoration: BoxDecoration(image: DecorationImage(image: AssetImage('lib/images/smiley_face.png'))),
                   ),
                   SizedBox(height: 10),
                   Text(
