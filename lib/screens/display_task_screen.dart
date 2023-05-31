@@ -178,8 +178,8 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                         return Container(
                           height: 40,
                           width: index != 0
-                              ? ((_included[index].username).length * 8) + 115.0
-                              : ((_included[index].username).length * 8) + 140.0, // calculation for length acording to if creator and username length
+                              ? ((_included[index].username).length * 8) + 118.0
+                              : ((_included[index].username).length * 8) + 142.0, // calculation for length acording to if creator and username length
                           child: Card(
                             child: ListTile(
                               leading: CircleAvatar(

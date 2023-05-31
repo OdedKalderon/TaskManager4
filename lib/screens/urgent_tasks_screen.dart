@@ -13,6 +13,7 @@ import '../providers/taskprovider.dart';
 import '../main_drawer.dart';
 import '../providers/todoprovider.dart';
 import '../providers/usertaskprovider.dart';
+import '../widgets/taskitem.dart';
 import 'add_task_screen.dart';
 import 'display_task_screen.dart';
 
@@ -113,52 +114,8 @@ class UrgentsScreen extends StatelessWidget {
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          ListTile(
-                            onTap: () {
-                              //pushes a different screen whil forwarding some data, such as task[index] instance, todos, and shared users with it.
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: ((context) => DisplayTaskScreen(
-                                          task: allurgs[index],
-                                          taskTodos: Provider.of<TodoProvider>(context, listen: false).getTaskTodos(allurgs[index].TaskId),
-                                          sharedUsers:
-                                              Provider.of<UserTaskProvider>(context, listen: false).getTaskUserTasks(allurgs[index].TaskId)))));
-                            },
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                            contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                            title: Row(
-                              children: [
-                                Text(
-                                  allurgs[index].Name,
-                                  style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Icon(
-                                  IconData(0xf65a, fontFamily: iconFont, fontPackage: iconFontPackage),
-                                  color: Colors.red,
-                                  size: 20,
-                                )
-                              ],
-                            ),
-                            subtitle: allurgs[index].Description.length <= 35
-                                ? Text(
-                                    allurgs[index].Description + '\nDate Due To: ' + allurgs[index].DateDue,
-                                    style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
-                                  )
-                                : Text(allurgs[index].Description.toString().substring(0, 36) + '... \n' + 'Date Due To: ' + allurgs[index].DateDue),
-                            tileColor: Colors.white,
-                            trailing: Icon(IconData(0xf5d3, fontFamily: iconFont, fontPackage: iconFontPackage)),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          )
-                        ],
-                      );
+                      //widget from widgets folder
+                      return TaskItem(context: context, AllTasks: allurgs, index: index);
                     },
                     itemCount: allurgs.length,
                   ),
