@@ -11,7 +11,7 @@ import 'package:flutter_complete_guide/providers/socialprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../main_drawer.dart';
+import '../widgets/main_drawer.dart';
 import '../models/userc.dart';
 
 class SocialScreen extends StatefulWidget {

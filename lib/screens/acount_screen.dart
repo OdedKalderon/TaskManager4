@@ -16,7 +16,7 @@ import 'package:flutter_complete_guide/widgets/user_image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../main_drawer.dart';
+import '../widgets/main_drawer.dart';
 import '../models/task.dart' as task;
 import '../providers/authprovider.dart';
 import '../models/userc.dart';
@@ -160,7 +160,7 @@ class _AcountScreenState extends State<AcountScreen> {
                                           )
                                         : Text(
                                             _myFinished[index].Description.toString().substring(0, 36) +
-                                                '... ', //makes sure teh description fits within the list tile
+                                                '... ', //makes sure the description fits within the list tile
                                             style: GoogleFonts.quicksand(fontSize: 12, color: Colors.grey.shade700),
                                           ),
                                     Text(

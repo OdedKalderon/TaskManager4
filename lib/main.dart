@@ -57,6 +57,7 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         home: StreamBuilder(
+            //checks if a user is signed in and shows a certain screen acorrding to the result.
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (ctx, userSnapshot) {
               if (userSnapshot.hasData) {

@@ -52,6 +52,8 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //input: none
+    //output: returns a list of users that are shared or created the specific task that is being displayed
     List<UserC> getIncluded() {
       List<UserC> included = [];
       String managerId = Provider.of<TaskProvider1>(context, listen: false).getTaskManagerId(widget.task.TaskId);
@@ -86,6 +88,8 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
               child: Row(
                 children: [
                   IconButton(
+                      //checks if the user is the creator and if so
+                      //shows him a dialog for a final acception to delete the task
                       onPressed: () {
                         widget.task.UserId == FirebaseAuth.instance.currentUser.uid
                             ? deleteDialog(context)
@@ -102,6 +106,8 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                         color: Colors.red.shade700,
                       )),
                   IconButton(
+                      //checks if the user is the creator and if so
+                      //shows him a dialog for a final acception to completely finish the task
                       onPressed: () {
                         widget.task.UserId == FirebaseAuth.instance.currentUser.uid
                             ? finishDialog(context)
@@ -268,6 +274,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                 )),
             ElevatedButton(
                 onPressed: () async {
+                  //saves changes by deleteing the previous todo list and creating a new one according to the changes.
                   for (Todo tudu in _existing) {
                     await Provider.of<TodoProvider>(context, listen: false).deleteTodoItem(tudu.todoId);
                   }
@@ -294,6 +301,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
     );
   }
 
+  //a dialog for the manager to check if he actually wants to finish the task completely
   finishDialog(BuildContext context) async {
     showDialog(
         context: context,
@@ -315,6 +323,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                     'Finish',
                     style: GoogleFonts.quicksand(color: Colors.green.shade800, fontWeight: FontWeight.w500),
                   ),
+                  //deletes the Todo list (aint necessary anymore) and sets that task to done
                   onPressed: () async {
                     Provider.of<TaskProvider1>(context, listen: false).setAsDone(widget.task.TaskId);
                     for (Todo tudu in widget.taskTodos) {
@@ -328,6 +337,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
             )));
   }
 
+  //a dialog for the manager to check if he actually wants to delete the task completely
   deleteDialog(BuildContext context) {
     showDialog(
         context: context,
@@ -349,6 +359,7 @@ class _DisplayTaskScreenState extends State<DisplayTaskScreen> {
                     'Delete',
                     style: GoogleFonts.quicksand(color: Colors.red.shade800, fontWeight: FontWeight.w500),
                   ),
+                  //deletes everything that is related to this app
                   onPressed: () async {
                     await Provider.of<TaskProvider1>(context, listen: false).deleteTask(widget.task.TaskId);
                     for (Todo tudu in widget.taskTodos) {

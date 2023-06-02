@@ -7,8 +7,8 @@ import 'package:flutter_complete_guide/providers/taskprovider.dart';
 import 'package:flutter_complete_guide/providers/todoprovider.dart';
 import 'package:flutter_complete_guide/providers/usertaskprovider.dart';
 import 'package:flutter_complete_guide/screens/acount_screen.dart';
+import 'package:flutter_complete_guide/screens/add_task_screen.dart';
 import 'package:flutter_complete_guide/screens/social_screen.dart';
-import 'package:flutter_complete_guide/screens/add_task_tab.dart';
 import 'package:flutter_complete_guide/screens/urgent_tasks_screen.dart';
 import 'package:flutter_iconpicker/IconPicker/Packs/Cupertino.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +22,7 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  final List<Widget> _pages = [TasksScreen(), UrgentsScreen(), AddTaskTab(), SocialScreen(), AcountScreen()];
+  final List<Widget> _pages = [TasksScreen(), UrgentsScreen(), AddTaskScreen(), SocialScreen(), AcountScreen()];
   int _selectedPageIndex = 0;
 
   //input: none

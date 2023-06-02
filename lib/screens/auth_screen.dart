@@ -22,6 +22,9 @@ class _AuthScreenState extends State<AuthScreen> {
   var _userName = '';
   var _userPassword = '';
 
+  //input: none
+  //output: checks if the fields of the authantication form are valid,
+  //        and if so tries to log in to the user useing the AuthProvider function
   void _trySubmit() {
     final isValid = _formKey.currentState?.validate();
     FocusScope.of(context).unfocus();

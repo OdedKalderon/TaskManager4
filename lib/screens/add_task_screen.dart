@@ -16,7 +16,7 @@ import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_complete_guide/main_drawer.dart';
+import 'package:flutter_complete_guide/widgets/main_drawer.dart';
 
 import '../models/userc.dart';
 import '../providers/authprovider.dart';
@@ -105,6 +105,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       }
       ;
 
+      //resets all the form fields
       setState(() {
         _newtodos = [];
         _selectedDate = null;
@@ -335,11 +336,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                   child: ListView(
                                     children: [
                                       for (Todo todoo in _newtodos)
+                                        //a seperate widget in widgets folder
                                         TodoItem(
-                                          //a seperate widget in widgets folder
                                           todo: todoo,
-                                          isDone: _todoDone,
-                                          onDeleteItem: _deleteToDoItem,
+                                          isDone: _todoDone, //function defined up this file
+                                          onDeleteItem: _deleteToDoItem, //function defined up this file
                                         )
                                     ],
                                   )),
